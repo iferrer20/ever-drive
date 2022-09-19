@@ -39,18 +39,19 @@ class DriveController {
             $files = get_directory_files($this->path);
             require 'views/explorer.php';
         } else if (is_file($this->path)) {
+            $mime_type = mime_content_type($this->path);
+            header('Content-type: ' . $this->path);
             readfile($this->path);
         } else {
             require 'views/file404.php';
         }
-        
     }
 
     function auth() {
         global $uri;
         if ($this->drivemodel->check_password($this->password)) {
             $_SESSION['drive'] = $this->drivename; // Set drivename to session
-            header('Location: ' . $uri);
+            header('Location: /' . $uri);
         } else {
             // Incorrect password
             http_response_code(403);

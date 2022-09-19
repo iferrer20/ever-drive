@@ -50,11 +50,9 @@ function get_directory_files($dir) {
     foreach (array_diff(scandir($dir), array('.', '..')) as $name) {
         $file = new FileModel();
         $file->name = $name;
-        $file->path = $dir . $name;
+        $file->path = $dir . '/' . $name;
         $file->is_directory = is_dir($file->path);
-        echo var_dump($file->is_directory);
-        echo $file->path;
-        $file->size = filesize($file->path);
+        $file->size = $file->is_directory ? 0 : filesize($file->path);
         $files[] = $file;
     }
     return $files;
