@@ -96,6 +96,26 @@
   font-size: 20pt;
 }
 
+#context-menu {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background-color: #FBFBFB;
+  padding: 10px;
+  z-index: 10;
+  box-shadow: 0px 0px 26px -8px rgba(0, 0, 0, 0.75);
+  border-radius: 10px;
+  width: 150px;
+}
+#context-menu div {
+  padding: 10px;
+  border-radius: 10px;
+}
+#context-menu div:hover {
+  cursor: pointer;
+  background-color: #D7D7D7;
+}
+
 body {
   overflow-x: hidden;
 }
@@ -298,24 +318,6 @@ body {
   text-align: right;
 }
 
-.modal-shadow {
-  z-index: -1;
-  position: fixed;
-  background-color: rgba(0, 0, 0, 0);
-  transition-property: background-color, z-index;
-  transition-timing-function: ease-in-out, step-end;
-  transition-duration: 0.5s, 0.5s;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-.modal-shadow.displayed {
-  transition-duration: 0.5s, 0s;
-  z-index: 100;
-  background-color: rgba(0, 0, 0, 0.527);
-}
-
 body, html {
   margin: 0;
   font-family: "Inter", sans-serif;
@@ -372,6 +374,24 @@ input {
   display: flex;
 }
 
+.modal-shadow {
+  z-index: -1;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0);
+  transition-property: background-color, z-index;
+  transition-timing-function: ease-in-out, step-end;
+  transition-duration: 0.5s, 0.5s;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.modal-shadow.displayed {
+  transition-duration: 0.5s, 0s;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.527);
+}
+
 form {
   display: flex;
   flex-direction: column;
@@ -400,4 +420,8 @@ form > input, form > button, form > div {
 
 .self-left {
   align-self: flex-start;
+}
+
+.hidden {
+  display: none;
 }

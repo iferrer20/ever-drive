@@ -1,0 +1,134 @@
+.header {
+  width: 100%;
+  height: 80px;
+  background-color: $white;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  box-sizing: border-box;
+  align-items: center;
+
+  input {
+    width: 500px;
+  }
+
+  img {
+    height: 100%;
+  }
+
+  span {
+    font-size: 50px;
+    margin-left: 200px;
+  }
+}
+
+.drive-main {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .path {
+    padding: 10px;
+    border-bottom: 3px solid $gray;
+  }
+
+  .info {
+    display: flex;
+    align-items: center;
+    padding: 10px 50px 10px 50px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    > div {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+    }
+    span {
+      font-size: 40px;
+      margin-right: 10px;
+    }
+    .author {
+
+    }
+  }
+
+  .explorer {
+    padding-left: 100px;
+    padding-right: 100px;
+    box-sizing: border-box;
+
+    table {
+      border-collapse: collapse; 
+      width: 100%;
+      user-select: none;
+
+      .entry.selected {
+        background-color: rgb(205, 255, 255);
+        .name {
+          color: rgb(40, 169, 255);
+        }
+      }
+
+      th {
+        text-align: left;
+      }
+      tr {
+        border-bottom: 3px solid $gray;
+        transition: background-color ease-in-out 0.05s;
+
+        .icon {
+          width: 60px;
+          text-align: center;
+          .file { 
+            font-size: 50px;
+            
+            color: $filec;
+          }
+          .folder {
+            font-size: 50px;
+            user-select: none;
+            color: $folderc;
+          }
+        }
+
+        &:last-child {
+          border-bottom: 0px solid $gray !important;
+        }
+
+        &:hover {
+          background-color: rgb(239, 255, 255);
+        }
+      }
+    }
+  }
+}
+
+.notfound {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  font-size: 20pt;
+}
+
+#context-menu {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background-color: $white;
+  padding: 10px;
+  z-index: 10;
+  box-shadow: 0px 0px 26px -8px rgba(0,0,0,0.75);
+  border-radius: 10px;
+  width: 150px;
+
+  div {
+    padding: 10px;
+    border-radius: 10px;
+    &:hover {
+      cursor: pointer;
+      background-color: $gray;
+    }
+  }
+}

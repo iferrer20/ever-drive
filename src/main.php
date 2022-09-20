@@ -6,7 +6,7 @@ define('DEFAULT_MODULE', 'drive');
 define('DEFAULT_ACTION', 'list');
 
 $action = $_POST['action'] ?? DEFAULT_ACTION;
-$uri = htmlspecialchars(rtrim(substr(str_replace('..', '', urldecode($_SERVER['REQUEST_URI'])), 1) . '/', '/'));
+$uri = htmlspecialchars(rtrim(substr(str_replace('..', '', urldecode($_SERVER['REQUEST_URI'])), 1), '/'));
 $uri_arr = explode('/', $uri);
 $module = $uri_arr[0];
 

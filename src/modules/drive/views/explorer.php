@@ -1,6 +1,25 @@
 <?php 
 require 'header.php';
 ?>
+<div class="hidden" id="context-menu">
+    <div class="create-directory">Create directory</div>
+    <div class="submit-file">Submit file</div>
+</div>
+<div class="hidden">
+    <form action="" method="POST" enctype="multipart/form-data" id="submit-form">
+        <input type="hidden" name="action" value="submitfile">
+        <input name="file" multiple="multiple" type="file" id="input-file">
+    </form>
+</div>
+<div class="modal" id="modal-create-folder">
+    <form action="" method="POST">
+        <input type="hidden" name="action" value="newfolder">
+        <h2>Create folder</h2>
+        <input type="text" name="name" placeholder="Folder name">
+        <button class="modal-close self-center">Create folder</button>
+    </form>
+</div>
+<button class="hidden" modal-open="modal-create-folder">Crear drive ahora</button>
 <div class="drive-main">
 <!-- Drive main -->
     <div class="path">Path</div>

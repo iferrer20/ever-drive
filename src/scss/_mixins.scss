@@ -1,0 +1,13 @@
+@mixin create-btn($width, $padding) {
+  padding: $padding;
+  width: $width;
+  border-radius: 20px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  margin: 5px;
+  color: white;
+  font-weight: bold;
+  font-size: 12pt;
+  background: linear-gradient(279.5deg, $cdmain1 12.23%, $cdmain2 104.2%);
+}

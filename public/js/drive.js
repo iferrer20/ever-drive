@@ -61,4 +61,19 @@ $(document).keydown(function(event) {
 });
 
 
-setTimeout(() => $('button[modal-open=ask-password]').click(), 100);
+$('button[modal-open=ask-password]').click();
+
+if ($('.explorer').length) {
+    var context_menu = $('#context-menu');
+    $('body').contextmenu((event) => {
+        context_menu.css('transform', `translate(${event.clientX}px, ${event.clientY}px)`);
+        context_menu.removeClass('hidden');
+        return false;
+    }).click(() => {
+        context_menu.addClass('hidden');
+    });
+}
+
+$('.create-directory').click(() => $('button[modal-open=modal-create-folder]').click());
+$('.submit-file').click(() => $('#input-file').click());
+$('#input-file').change(() => $('#submit-form').submit());

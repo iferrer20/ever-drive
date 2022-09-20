@@ -11,7 +11,7 @@ class DriveController {
     private $drivemodel;
 
     function __construct() {
-        global $uri, $uri_arr;
+        global $uri, $uri_arr, $action;
         $this->drivename = $uri_arr[1];
         $this->driveroot = DRIVES_DIR . $this->drivename;
         $this->path = DRIVES_DIR . $uri;
@@ -26,15 +26,15 @@ class DriveController {
         if (!$this->drivemodel->get($this->drivename)) { 
             $this->drivemodel->create($this->drivename, $this->password); // create drive if not exists 
         }
+        
+        if (!empty($this->drivemodel->password) && strcmp($_SESSION['drive'] ?? '', $this->drivename) && $action != 'auth') {
+            require 'views/askpw.php';
+            die();
+        }
+
     }
 
     function list() {
-        $askpw = !empty($this->drivemodel->password) && strcmp($_SESSION['drive'] ?? '', $this->drivename);
-        if ($askpw) {
-            require 'views/askpw.php';
-            return;
-        }
-        
         if (is_dir($this->path)) {
             $files = get_directory_files($this->path);
             require 'views/explorer.php';
@@ -62,6 +62,24 @@ class DriveController {
 
     function removefile() {
 
+    }
+
+    function submitfile() {
+        global $uri;
+        foreach ($_FILES as &$file) {
+            $filepath = $this->path . '/' . htmlspecialchars($file['name']);
+            move_uploaded_file($file['tmp_name'], $filepath);
+        }
+        header('Location: /' . $uri);
+    }
+
+    function newfolder() {
+        global $uri;
+        $folderpath = $this->path . '/' . htmlspecialchars($_POST['name']);
+        if (!is_dir($folderpath)) {
+            mkdir($folderpath);
+        }
+        header('Location: /' . $uri);
     }
 
 };

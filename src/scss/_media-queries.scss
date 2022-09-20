@@ -1,0 +1,21 @@
+//  map holding breakpoint values
+$breakpoints: (
+  mobile : 600px, 
+  tablet : 960px
+);
+
+//  mixin to print out media queries (based on map keys passed) 
+@mixin media($keys...){
+  @each $key in $keys { 
+    @if $key == desktop {
+      @media(min-width: map-get($breakpoints, tablet)) {
+        @content;
+      }
+    } @else {
+      @media (max-width: map-get($breakpoints, $key)){
+        @content;
+      }
+    }
+     
+  }
+}

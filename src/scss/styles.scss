@@ -1,0 +1,103 @@
+@import 'palette';
+@import 'media-queries';
+@import 'mixins';
+@import 'drive';
+@import 'home';
+
+body, html {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  @include create-btn(150px, 8px);
+  &.no-gradient {
+    background: none;
+  }
+  &.black {
+    color: black;
+  }
+}
+
+input {
+  background-color: $gray;
+  outline: none;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 12pt;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 101;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: white;
+  border-radius: 10px;
+
+  &.displayed {
+    display: flex;
+  }
+}
+
+.modal-shadow {
+  z-index: -1;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.0);
+  transition-property: background-color, z-index;
+  transition-timing-function: ease-in-out, step-end;
+  transition-duration: 0.5s, 0.5s;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  &.displayed {
+    transition-duration: 0.5s, 0.0s;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.527);
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  > input, > button, > div {
+    margin-bottom: 10px;
+  }
+}
+
+.select {
+  color: $ctext;
+  user-select: none;
+  background-color: $gray;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 12pt;
+  width: 100px;
+}
+
+.self-right {
+  align-self: flex-end;
+}
+.self-center {
+  align-self: center;
+}
+.self-left {
+  align-self: flex-start;
+}
+
+.hidden {
+  display: none;
+}

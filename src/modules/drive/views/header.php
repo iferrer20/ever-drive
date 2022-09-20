@@ -19,7 +19,7 @@
     <script src="/js/index.js" async></script>
     <script src="/js/drive.js" async></script>
 
-    <title>Ever drive - <?= $GLOBALS['drivename'] ?></title>
+    <title>Ever drive - <?= $this->drivename ?></title>
 </head>
 <body>
 <div class="header">           
@@ -29,3 +29,4 @@
     account_circle
     </span>
 </div>
+<div class="modal-shadow"></div>
