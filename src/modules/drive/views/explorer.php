@@ -78,23 +78,22 @@ require 'header.php';
         </tr>
 <?php endif; ?>
 
-<?php foreach (get_directory_files($data->path) as $file) {
+<?php foreach (get_folders($data->path) as $folder) {
 ?>
-    <?php if ($file->is_directory): ?>
         <tr class="entry folder">
             <td class="icon"><span class="material-icons-round">folder</span></td>
+            <td class="name"><?= $folder->name ?></td>
+            <td class="size"></td>
+        </tr>
+<?php } ?>
+<?php foreach (get_files($data->path) as $file) {
+?>
+        <tr class="entry file">
+            <td class="icon"><span class="material-icons-round">description</span></td>
             <td class="name"><?= $file->name ?></td>
             <td class="size"><?= $file->size ?></td>
         </tr>
-    <?php else: ?>
-    <tr class="entry file">
-        <td class="icon"><span class="material-icons-round">description</span></td>
-        <td class="name"><?= $file->name ?></td>
-        <td class="size"><?= $file->size ?></td>
-    </tr>
-    <?php endif; ?>
 <?php } ?>
-
     </table>
     </div>
 

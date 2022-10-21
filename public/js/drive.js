@@ -66,8 +66,7 @@ $(document).keydown(function(event) {
     if (newSelected.length) selectEntry(newSelected);
 });
 
-
-$('button[modal-open=ask-password]').click();
+if ($('#ask-password').length) modal_open('#ask-password');
 
 if ($('.explorer').length) {
     let current_context_menu;

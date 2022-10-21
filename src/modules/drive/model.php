@@ -38,21 +38,36 @@ class DriveModel {
     }
 };
 
-class FileModel {
+class EntryModel {
     public $name;
     public $size;
     public $path;
     public $is_directory;
 };
 
-function get_directory_files($dir) {
+function get_folders($dir) {
+    $folders = [];
+    foreach (array_diff(scandir($dir), array('.', '..')) as $name) {
+        $folder = new EntryModel();
+        $folder->name = $name;
+        $folder->path = $dir . '/' . $name;
+        if (!is_dir($folder->path)) continue;
+        $folder->is_directory = true;
+        $folder->size = 0;
+        $folders[] = $folder;
+    }
+    return $folders;
+}
+
+function get_files($dir) {
     $files = [];
     foreach (array_diff(scandir($dir), array('.', '..')) as $name) {
-        $file = new FileModel();
+        $file = new EntryModel();
         $file->name = $name;
         $file->path = $dir . '/' . $name;
-        $file->is_directory = is_dir($file->path);
-        $file->size = $file->is_directory ? 0 : filesize($file->path);
+        if (!is_file($file->path)) continue;
+        $file->is_directory = false;
+        $file->size = filesize($file->path);
         $files[] = $file;
     }
     return $files;
