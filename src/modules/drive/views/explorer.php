@@ -14,7 +14,7 @@ require 'header.php';
 <div class="hidden">
     <form action="" method="POST" enctype="multipart/form-data" id="submit-form">
         <input type="hidden" name="action" value="submitfile">
-        <input name="file" multiple="multiple" type="file" id="input-file">
+        <input name="file[]" type="file" id="input-file" multiple>
     </form>
     <form action="" method="POST" id="move-form">
         <input type="hidden" name="action" value="move">
@@ -23,7 +23,13 @@ require 'header.php';
         <button type="submit" id="move-entry"></button>
     </form>
 </div>
-<div class="modal" id="modal-create-folder">
+<div id="upload-file-card" class="transition-visibility hidden">
+    Subir a <?= $data->drivename ?>
+    <span class="material-icons-round">
+    file_upload
+    </span>
+</div>
+<div class="modal hidden" id="modal-create-folder">
     <form action="" method="POST">
         <input type="hidden" name="action" value="newfolder">
         <h2>Create folder</h2>
@@ -31,7 +37,7 @@ require 'header.php';
         <button class="modal-close self-center" type="submit">Crear carpeta</button>
     </form>
 </div>
-<div class="modal" id="modal-del-folder">
+<div class="modal hidden" id="modal-del-folder">
     <form action="" method="POST">
         <input type="hidden" name="action" value="delfolder">
         <input type="hidden" name="name" class="input-selected-entry">
@@ -42,7 +48,7 @@ require 'header.php';
         </div>
     </form>
 </div>
-<div class="modal" id="modal-del-file">
+<div class="modal hidden" id="modal-del-file">
     <form action="" method="POST">
         <input type="hidden" name="action" value="delfile">
         <input type="hidden" name="name" class="input-selected-entry">
@@ -53,7 +59,6 @@ require 'header.php';
         </div>
     </form>
 </div>
-<button class="hidden" modal-open="modal-create-folder">Crear drive ahora</button>
 <div class="drive-main">
 <!-- Drive main -->
     <div class="path">Path</div>

@@ -35,7 +35,7 @@ input {
 }
 
 .modal {
-  display: none;
+  display: flex;
   position: fixed;
   z-index: 101;
   transform: translate(-50%, -50%);
@@ -45,28 +45,38 @@ input {
   padding-right: 20px;
   background-color: white;
   border-radius: 10px;
-
-  &.displayed {
-    display: flex;
-  }
+  text-align: center;
 }
 
-.modal-shadow {
-  z-index: -1;
+.shadow {
+  z-index: 100;
   position: fixed;
-  background-color: rgba(0, 0, 0, 0.0);
-  transition-property: background-color, z-index;
-  transition-timing-function: ease-in-out, step-end;
-  transition-duration: 0.5s, 0.5s;
+  background-color: rgba(0, 0, 0, 0.582);
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
 
-  &.displayed {
-    transition-duration: 0.5s, 0.0s;
-    z-index: 100;
-    background-color: rgba(0, 0, 0, 0.527);
+  .no-transition {
+    transition-duration: 0.0s, 0.0s;
+  }
+
+  // &.displayed {
+  //   transition-duration: 0.5s, 0.0s;
+  //   z-index: 100;
+  //   background-color: rgba(0, 0, 0, 0.527);
+  // }
+}
+
+.transition-visibility {
+  opacity: 1;
+  transition-property: opacity, visibility;
+  transition-timing-function: ease-in-out, step-end;
+  transition-duration: 0.3s, 0.0s;
+
+  &.hidden {
+    opacity: 0;
+    transition-duration: 0.3s, 0.3s;
   }
 }
 
@@ -99,5 +109,6 @@ form {
 }
 
 .hidden {
-  display: none;
+  visibility: hidden;
+  height: 0;
 }

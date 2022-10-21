@@ -45,8 +45,8 @@ function deleteFile() {
 }
 
 function moveEntry(destination) {
-    $(".input-destination").val(destination);
-    $("#move-entry").click();
+    $('.input-destination').val(destination);
+    $('#move-entry').click();
 }
 
 function selecFile() {
@@ -57,6 +57,27 @@ function submiFile() {
     $('#submit-form').submit();
 }
 
+$(document).on('dragover', (event) => {
+    $('#upload-file-card').removeClass('hidden');
+    $('.shadow').removeClass('hidden');
+    console.log('a')
+    event.preventDefault();
+    event.stopPropagation();
+});
+
+$(document).on('drop', (event) => {
+    $(document).trigger('dragleave');
+    $('#input-file').prop('files', event.originalEvent.dataTransfer.files);
+    submiFile();
+    return false;
+});
+
+$(document).on('dragleave', (event) => {
+    console.log('b')
+    $('#upload-file-card').addClass('hidden');
+    $('.shadow').addClass('hidden');
+    drag_file = false;
+});
 
 var last_click = {};
 var drag = false;

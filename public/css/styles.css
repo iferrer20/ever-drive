@@ -123,6 +123,27 @@
   background-color: #D7D7D7;
 }
 
+#upload-file-card {
+  z-index: 101;
+  width: 200px;
+  height: 100px;
+  background-color: #45D2FF;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+}
+#upload-file-card span {
+  font-size: 30pt;
+}
+
 body {
   overflow-x: hidden;
 }
@@ -366,7 +387,7 @@ input {
 }
 
 .modal {
-  display: none;
+  display: flex;
   position: fixed;
   z-index: 101;
   transform: translate(-50%, -50%);
@@ -376,27 +397,31 @@ input {
   padding-right: 20px;
   background-color: white;
   border-radius: 10px;
-}
-.modal.displayed {
-  display: flex;
+  text-align: center;
 }
 
-.modal-shadow {
-  z-index: -1;
+.shadow {
+  z-index: 100;
   position: fixed;
-  background-color: rgba(0, 0, 0, 0);
-  transition-property: background-color, z-index;
-  transition-timing-function: ease-in-out, step-end;
-  transition-duration: 0.5s, 0.5s;
+  background-color: rgba(0, 0, 0, 0.582);
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
 }
-.modal-shadow.displayed {
-  transition-duration: 0.5s, 0s;
-  z-index: 100;
-  background-color: rgba(0, 0, 0, 0.527);
+.shadow .no-transition {
+  transition-duration: 0s, 0s;
+}
+
+.transition-visibility {
+  opacity: 1;
+  transition-property: opacity, visibility;
+  transition-timing-function: ease-in-out, step-end;
+  transition-duration: 0.3s, 0s;
+}
+.transition-visibility.hidden {
+  opacity: 0;
+  transition-duration: 0.3s, 0.3s;
 }
 
 form {
@@ -430,7 +455,6 @@ form > input, form > button, form > div {
 }
 
 .hidden {
-  display: none;
+  visibility: hidden;
+  height: 0;
 }
-
-/*# sourceMappingURL=styles.css.map */

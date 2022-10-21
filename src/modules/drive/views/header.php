@@ -29,4 +29,4 @@
     account_circle
     </span>
 </div>
-<div class="modal-shadow"></div>
+<div class="shadow hidden transition-visibility"></div>

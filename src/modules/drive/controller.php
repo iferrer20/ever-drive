@@ -18,7 +18,10 @@ class DriveController {
         global $uri, $uri_arr, $action;
         $this->drivename = $uri_arr[1];
         $this->driveroot = DRIVES_DIR . $this->drivename;
-        $this->path = DRIVES_DIR . $uri . '/';
+        $this->path = DRIVES_DIR . $uri;
+        if (is_dir($this->path)) {
+            $this->path .= '/';
+        }
         $this->password = $_POST['password'] ?? 0;
         $this->drivemodel = new DriveModel();
 
@@ -79,9 +82,12 @@ class DriveController {
     }
 
     function submitfile() {
-        foreach ($_FILES as &$file) {
-            $filepath = secure_path($this->driveroot, $this->path . $file['name']);
-            move_uploaded_file($file['tmp_name'], $filepath);
+        $total = count($_FILES['file']['name']);
+        for( $i=0 ; $i < $total ; $i++ ) {
+            $name = $_FILES['file']['name'][$i];
+            $tmp_path = $_FILES['file']['tmp_name'][$i];
+            $filepath = secure_path($this->driveroot, $this->path . $name);
+            move_uploaded_file($tmp_path, $filepath);
         }
     }
 

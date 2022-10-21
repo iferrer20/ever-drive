@@ -1,22 +1,22 @@
 
 
 // Modal
-var modal_shadow = $('.modal-shadow');
+var shadow = $('.shadow');
 $('button[modal-open]').each(function() {
     let modal = $('#' + $(this).attr('modal-open'));
     $(this).click(() => {
-        modal.add(modal_shadow).addClass('displayed');
+        modal.add(shadow).removeClass('hidden');
         $(document.body).css('overflow', 'hidden');
     });
 });
 
 $('.modal-close').click(() => {
-    $('.modal').add(modal_shadow).removeClass('displayed');
+    $('.modal').add(shadow).addClass('hidden');
     $(document.body).css('overflow', '');
 });
 
 function modalOpen(id) {
     let modal = $('#' + id);
-    modal.add(modal_shadow).addClass('displayed');
+    modal.add(shadow).removeClass('hidden');
     $(document.body).css('overflow', 'hidden');
 }
