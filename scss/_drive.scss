@@ -69,6 +69,14 @@
         }
       }
 
+      .entry.drag-entry {
+        top: 0;
+        left: 0;
+        position: absolute;
+        opacity: 0.7;
+        pointer-events: none;
+      }
+
       th {
         text-align: left;
       }

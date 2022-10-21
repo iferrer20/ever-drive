@@ -13,7 +13,7 @@ $uri_arr = explode('/', $uri);
 $module = $uri_arr[0];
 
 $path_controller = 'modules/' . $module;
-if (!is_dir('modules/' . $module)) {
+if (!is_dir('modules/' . $module) || $module == 'drive') {
     $module = DEFAULT_MODULE;
     array_unshift($uri_arr, $module);
     $path_controller =  'modules/' . $module;

@@ -16,6 +16,12 @@ require 'header.php';
         <input type="hidden" name="action" value="submitfile">
         <input name="file" multiple="multiple" type="file" id="input-file">
     </form>
+    <form action="" method="POST" id="move-form">
+        <input type="hidden" name="action" value="move">
+        <input type="hidden" name="from" class="input-selected-entry">
+        <input type="hidden" name="to" class="input-destination">
+        <button type="submit" id="move-entry"></button>
+    </form>
 </div>
 <div class="modal" id="modal-create-folder">
     <form action="" method="POST">

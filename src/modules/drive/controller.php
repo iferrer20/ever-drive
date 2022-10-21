@@ -18,7 +18,7 @@ class DriveController {
         global $uri, $uri_arr, $action;
         $this->drivename = $uri_arr[1];
         $this->driveroot = DRIVES_DIR . $this->drivename;
-        $this->path = DRIVES_DIR . $uri;
+        $this->path = DRIVES_DIR . $uri . '/';
         $this->password = $_POST['password'] ?? 0;
         $this->drivemodel = new DriveModel();
 
@@ -69,7 +69,7 @@ class DriveController {
     }
 
     function delfile() {
-        $filepath = $this->path . '/' . secure_format($_POST['name']);
+        $filepath = secure_path($this->driveroot, $this->path . $_POST['name']);
         
         if (!is_file($filepath)) {
             return;
@@ -80,14 +80,13 @@ class DriveController {
 
     function submitfile() {
         foreach ($_FILES as &$file) {
-            $filepath = $this->path . '/' . secure_format($file['name']);
+            $filepath = secure_path($this->driveroot, $this->path . $file['name']);
             move_uploaded_file($file['tmp_name'], $filepath);
         }
     }
 
     function newfolder() {
-        $folderpath = $this->path . '/' . secure_format($_POST['name']);
-        
+        $folderpath = secure_path($this->driveroot, $this->path . $_POST['name']);
         if (is_dir($folderpath)) {
             return;
         }
@@ -96,13 +95,20 @@ class DriveController {
     }
 
     function delfolder() {
-        $folderpath = $this->path . '/' . secure_format($_POST['name']);
+        $folderpath = secure_path($this->driveroot, $this->path . $_POST['name']);
         
         if (!is_dir($folderpath)) {
             return;
         }
 
         shell_exec("rm -rf '$folderpath'"); // Remove folder
+    }
+
+    function move() {
+        $from_path = secure_path($this->driveroot, $this->path . $_POST['from']);
+        $to_path = secure_path($this->driveroot, $this->path . $_POST['to']);
+        
+        shell_exec("mv '$from_path' '$to_path'"); // Move 
     }
 };
 

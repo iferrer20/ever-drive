@@ -1,14 +1,23 @@
 
 
-function selectEntry(entry) {
-    $('.selected').removeClass('selected');  
-    entry.addClass('selected');
+var selected_entry;
+var drag_entry;
+var hover_entry;
 
+function selectEntry(entry, remove = true) {
+    selected_entry = entry;
+    if (remove) $('.selected').removeClass('selected');  
+    entry.addClass('selected');
     $('.input-selected-entry').val($('.selected .name').text());
+}
+
+function hoverEntry(entry) {
+    hover_entry = entry;
 }
 
 function deselectEntry() {
     $('.selected').removeClass('selected');  
+    selected_entry = undefined;
 }
 
 function openEntry(entry) {
@@ -23,50 +32,109 @@ function openEntry(entry) {
     }
 }
 
-var lastClick = {};
+function createFolder() {
+    modalOpen('modal-create-folder');
+}
+
+function deleteFolder() {
+    modalOpen('modal-del-folder');
+}
+
+function deleteFile() {
+    modalOpen('modal-del-file');
+}
+
+function moveEntry(destination) {
+    $(".input-destination").val(destination);
+    $("#move-entry").click();
+}
+
+function selecFile() {
+    $('#input-file').click();
+}
+
+function submiFile() {
+    $('#submit-form').submit();
+}
+
+
+var last_click = {};
+var drag = false;
 const entries = $('.explorer .entry');
-entries.click(function() {
-    let selectedEntry = $(this);
-    console.log();
-    selectEntry(selectedEntry);
-    if (Date.now()-lastClick.t < 400 && entries.index(selectedEntry) == entries.index(lastClick.selected)) {
-        openEntry(selectedEntry);
+entries.on('mousedown', function(event) {
+    drag = true;
+    selectEntry($(this));
+    if (Date.now()-last_click.t < 400 && entries.index(selected_entry) == entries.index(last_click.selected)) {
+        openEntry($(this));
     }
-    lastClick = { t: Date.now(), selected: $(this) };
+    last_click = { t: Date.now(), selected: $(this), x: event.clientX, y: event.clientY };
+    drag = true;
+});
+
+$(document).on('mouseup', () => {
+    drag_entry?.remove();
+    drag_entry = undefined;
+    drag = false;
+
+    if (hover_entry?.hasClass('folder') && !selected_entry.is(hover_entry)) {
+        moveEntry(hover_entry.find('.name').text());
+    }
+});
+
+entries.mouseover(function() {
+    hoverEntry($(this));
+    if (!drag) return;
+});
+
+entries.mouseleave(function() {
+    hover_entry = undefined;
+});
+
+$(document).on('mousemove', event => {
+    if (!drag) return;
+    if (!drag_entry) {
+        drag_entry = selected_entry.clone().addClass('drag-entry').prependTo($('.explorer table tbody'));
+        drag_entry.find('.size').remove();
+        drag_entry.css('border-bottom', 'none');
+    }
+    let entry_pos = selected_entry.offset();
+    let offset = {x: event.clientX - last_click.x, y: event.clientY - last_click.y};
+    drag_entry.css('transform', `translate(${entry_pos.left + offset.x}px, ${entry_pos.top + offset.y}px)`);
+    drag_entry.css('width', `${selected_entry.width()}px`);
+    drag_entry.css('height', `${selected_entry.height()}px`);
 });
 
 $(document).keydown(function(event) {
-    let selected = $('.selected');
-    let newSelected = '';
+    let new_selected = '';
     if (!$('.explorer tr').length) return
 
     switch (event.key) {
         case 'j':
         case 'ArrowDown':
-            if (!selected.length) {
-                newSelected = entries.first();
+            if (!selected_entry) {
+                new_selected = entries.first();
                 break;
             }
-            newSelected = selected.next();
+            new_selected = selected_entry.next();
             break;
     
         case 'k':
         case 'ArrowUp':
-            newSelected = selected.prev();
+            new_selected = selected_entry.prev();
             break;
         default:
             break;
 
         case 'Enter':
-            openEntry(selected);
+            openEntry(selected_entry);
             break;
 
     }
 
-    if (newSelected.length) selectEntry(newSelected);
+    if (new_selected.length) selectEntry(new_selected);
 });
 
-if ($('#ask-password').length) modal_open('#ask-password');
+if ($('#ask-password').length) modalOpen('#ask-password');
 
 if ($('.explorer').length) {
     let current_context_menu;
@@ -105,11 +173,11 @@ if ($('.explorer').length) {
         return false;
     })
 
-    $('.create-folder').click(() => $('button[modal-open=modal-create-folder]').click());
-    $('.submit-file').click(() => $('#input-file').click());
-    $('#input-file').change(() => $('#submit-form').submit());
+    $('.create-folder').click(createFolder);
+    $('.submit-file').click(selecFile);
+    $('#input-file').change(submiFile);
 
-    $('.del-folder').click(() => modal_open('modal-del-folder'));
-    $('.del-file').click(() => modal_open('modal-del-file'));
+    $('.del-folder').click(deleteFolder); 
+    $('.del-file').click(deleteFile);
 }
 

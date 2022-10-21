@@ -60,6 +60,13 @@
 .drive-main .explorer table .entry.selected .name {
   color: rgb(40, 169, 255);
 }
+.drive-main .explorer table .entry.drag-entry {
+  top: 0;
+  left: 0;
+  position: absolute;
+  opacity: 0.7;
+  pointer-events: none;
+}
 .drive-main .explorer table th {
   text-align: left;
 }

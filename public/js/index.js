@@ -15,7 +15,7 @@ $('.modal-close').click(() => {
     $(document.body).css('overflow', '');
 });
 
-function modal_open(id) {
+function modalOpen(id) {
     let modal = $('#' + id);
     modal.add(modal_shadow).addClass('displayed');
     $(document.body).css('overflow', 'hidden');
