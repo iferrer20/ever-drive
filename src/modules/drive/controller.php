@@ -4,11 +4,15 @@ require 'db.php';
 require 'model.php';
 
 class DriveController {
-    private $drivename;
-    private $driveroot;
-    private $path;
-    private $password;
-    private $drivemodel;
+    public $drivename;
+    public $driveroot;
+    public $path;
+    public $password;
+    public $drivemodel;
+
+    private function grant_access() {
+        $_SESSION['drive'] = $this->drivename;
+    }
 
     function __construct() {
         global $uri, $uri_arr, $action;
@@ -19,69 +23,87 @@ class DriveController {
         $this->drivemodel = new DriveModel();
 
         if (!preg_match('/^[A-Za-z0-9_]{0,32}$/', $this->drivename)) {
-            require 'views/invalid.php';
-            die();
+            render('invalid', $this);
         }
 
-        if (!$this->drivemodel->get($this->drivename)) { 
-            $this->drivemodel->create($this->drivename, $this->password); // create drive if not exists 
+        if (!$this->drivemodel->get($this->drivename)) {  // create drive if not exists 
+            $this->drivemodel->create($this->drivename, $this->password); 
+            $this->grant_access();
         }
         
-        if (!empty($this->drivemodel->password) && strcmp($_SESSION['drive'] ?? '', $this->drivename) && $action != 'auth') {
-            require 'views/askpw.php';
-            die();
+        if (empty($this->drivemodel->password)) { // If drive with no password, grant access
+            $this->grant_access();
         }
 
+        // Check Auth middleware controller
+        if (strcmp($_SESSION['drive'] ?? '', $this->drivename) && $action != 'auth') {
+            render('askpw', $this);
+        }
     }
 
     function list() {
-        if (is_dir($this->path)) {
-            $files = get_directory_files($this->path);
-            require 'views/explorer.php';
-        } else if (is_file($this->path)) {
+        if (is_file($this->path)) {
             $mime_type = mime_content_type($this->path);
             header('Content-type: ' . $this->path);
             readfile($this->path);
-        } else {
-            require 'views/file404.php';
+            return;
+        } 
+
+        if (!is_dir($this->path)) {
+            render('file404', $this);
         }
+        render('explorer', $this);
     }
 
     function auth() {
         global $uri;
         if ($this->drivemodel->check_password($this->password)) {
-            $_SESSION['drive'] = $this->drivename; // Set drivename to session
+            $this->grant_access();
             header('Location: /' . $uri);
         } else {
             // Incorrect password
             http_response_code(403);
             $incorrect_pw = true;
-            require 'views/askpw.php';
+            render('askpw', $this);
         }
     }
 
-    function removefile() {
+    function delfile() {
+        $filepath = $this->path . '/' . secure_format($_POST['name']);
+        
+        if (!is_file($filepath)) {
+            return;
+        }
 
+        unlink($filepath); // Remove file
     }
 
     function submitfile() {
-        global $uri;
         foreach ($_FILES as &$file) {
-            $filepath = $this->path . '/' . htmlspecialchars($file['name']);
+            $filepath = $this->path . '/' . secure_format($file['name']);
             move_uploaded_file($file['tmp_name'], $filepath);
         }
-        header('Location: /' . $uri);
     }
 
     function newfolder() {
-        global $uri;
-        $folderpath = $this->path . '/' . htmlspecialchars($_POST['name']);
-        if (!is_dir($folderpath)) {
-            mkdir($folderpath);
+        $folderpath = $this->path . '/' . secure_format($_POST['name']);
+        
+        if (is_dir($folderpath)) {
+            return;
         }
-        header('Location: /' . $uri);
+
+        mkdir($folderpath);
     }
 
+    function delfolder() {
+        $folderpath = $this->path . '/' . secure_format($_POST['name']);
+        
+        if (!is_dir($folderpath)) {
+            return;
+        }
+
+        shell_exec("rm -rf '$folderpath'"); // Remove folder
+    }
 };
 
 

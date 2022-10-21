@@ -1,9 +1,15 @@
 <?php 
 require 'header.php';
 ?>
-<div class="hidden" id="context-menu">
-    <div class="create-directory">Create directory</div>
+<div class="context-menu hidden" id="context-menu-default">
+    <div class="create-folder">Create folder</div>
     <div class="submit-file">Submit file</div>
+</div>
+<div class="context-menu hidden" id="context-menu-folder">
+    <div class="del-folder">Delete folder</div>
+</div>
+<div class="context-menu hidden" id="context-menu-file">
+    <div class="del-file">Delete file</div>
 </div>
 <div class="hidden">
     <form action="" method="POST" enctype="multipart/form-data" id="submit-form">
@@ -16,7 +22,29 @@ require 'header.php';
         <input type="hidden" name="action" value="newfolder">
         <h2>Create folder</h2>
         <input type="text" name="name" placeholder="Folder name">
-        <button class="modal-close self-center">Create folder</button>
+        <button class="modal-close self-center" type="submit">Crear carpeta</button>
+    </form>
+</div>
+<div class="modal" id="modal-del-folder">
+    <form action="" method="POST">
+        <input type="hidden" name="action" value="delfolder">
+        <input type="hidden" name="name" class="input-selected-entry">
+        <h2 class="center">¿Eliminar?</h2>
+        <div class="buttons">
+            <button type="submit">Eliminar</button>
+            <button type="button" class="modal-close no-gradient black">Cancelar</button>
+        </div>
+    </form>
+</div>
+<div class="modal" id="modal-del-file">
+    <form action="" method="POST">
+        <input type="hidden" name="action" value="delfile">
+        <input type="hidden" name="name" class="input-selected-entry">
+        <h2 class="center">¿Eliminar?</h2>
+        <div class="buttons">
+            <button type="submit">Eliminar</button>
+            <button type="button" class="modal-close no-gradient black">Cancelar</button>
+        </div>
     </form>
 </div>
 <button class="hidden" modal-open="modal-create-folder">Crear drive ahora</button>
@@ -30,7 +58,7 @@ require 'header.php';
         </div>
         <div class="drive">
             <span class="material-icons-round">cloud</span>
-            <?= $this->drivename ?>
+            <?= $data->drivename ?>
         </div> 
     </div>
 
@@ -43,20 +71,28 @@ require 'header.php';
             <th>Size</th>
         </tr>
 <?php if (substr_count($GLOBALS['uri'], '/') > 0) : ?>
-        <tr class="entry">
+        <tr class="entry folder">
             <td class="icon"><span class="material-icons-round folder">folder</td>
             <td class="name">..</td>
             <td class="size"></td>
         </tr>
 <?php endif; ?>
 
-<?php foreach ($files as $file) {
+<?php foreach (get_directory_files($data->path) as $file) {
 ?>
-        <tr class="entry">
-            <td class="icon"><span class="material-icons-round <?= $file->is_directory ? "folder\">folder" : "file\">description" ?></span></td>
+    <?php if ($file->is_directory): ?>
+        <tr class="entry folder">
+            <td class="icon"><span class="material-icons-round">folder</span></td>
             <td class="name"><?= $file->name ?></td>
             <td class="size"><?= $file->size ?></td>
         </tr>
+    <?php else: ?>
+    <tr class="entry file">
+        <td class="icon"><span class="material-icons-round">description</span></td>
+        <td class="name"><?= $file->name ?></td>
+        <td class="size"><?= $file->size ?></td>
+    </tr>
+    <?php endif; ?>
 <?php } ?>
 
     </table>

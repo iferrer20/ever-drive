@@ -14,3 +14,9 @@ $('.modal-close').click(() => {
     $('.modal').add(modal_shadow).removeClass('displayed');
     $(document.body).css('overflow', '');
 });
+
+function modal_open(id) {
+    let modal = $('#' + id);
+    modal.add(modal_shadow).addClass('displayed');
+    $(document.body).css('overflow', 'hidden');
+}

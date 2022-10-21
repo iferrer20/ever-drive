@@ -19,7 +19,7 @@
     <script src="/js/index.js" async></script>
     <script src="/js/drive.js" async></script>
 
-    <title>Ever drive - <?= $this->drivename ?></title>
+    <title>Ever drive - <?= $data->drivename ?></title>
 </head>
 <body>
 <div class="header">           

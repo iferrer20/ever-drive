@@ -67,24 +67,24 @@
   border-bottom: 3px solid #D7D7D7;
   transition: background-color ease-in-out 0.05s;
 }
-.drive-main .explorer table tr .icon {
-  width: 60px;
-  text-align: center;
-}
-.drive-main .explorer table tr .icon .file {
-  font-size: 50px;
-  color: #6DDCFF;
-}
-.drive-main .explorer table tr .icon .folder {
-  font-size: 50px;
-  user-select: none;
-  color: #FFCA62;
-}
 .drive-main .explorer table tr:last-child {
   border-bottom: 0px solid #D7D7D7 !important;
 }
 .drive-main .explorer table tr:hover {
   background-color: rgb(239, 255, 255);
+}
+.drive-main .explorer table .entry.file .icon {
+  color: #6DDCFF;
+}
+.drive-main .explorer table .entry.folder .icon {
+  color: #FFCA62;
+}
+.drive-main .explorer table .entry .icon {
+  width: 60px;
+  text-align: center;
+}
+.drive-main .explorer table .entry .icon span {
+  font-size: 50px;
 }
 
 .notfound {
@@ -96,7 +96,7 @@
   font-size: 20pt;
 }
 
-#context-menu {
+.context-menu {
   position: fixed;
   top: 0px;
   left: 0px;
@@ -107,11 +107,11 @@
   border-radius: 10px;
   width: 150px;
 }
-#context-menu div {
+.context-menu div {
   padding: 10px;
   border-radius: 10px;
 }
-#context-menu div:hover {
+.context-menu div:hover {
   cursor: pointer;
   background-color: #D7D7D7;
 }
@@ -425,3 +425,5 @@ form > input, form > button, form > div {
 .hidden {
   display: none;
 }
+
+/*# sourceMappingURL=styles.css.map */
