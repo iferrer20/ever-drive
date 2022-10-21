@@ -134,7 +134,7 @@ $(document).keydown(function(event) {
     if (new_selected.length) selectEntry(new_selected);
 });
 
-if ($('#ask-password').length) modalOpen('#ask-password');
+if ($('#ask-password').length) modalOpen('ask-password');
 
 if ($('.explorer').length) {
     let current_context_menu;
