@@ -44,6 +44,10 @@
   font-size: 40px;
   margin-right: 10px;
 }
+.drive-main .info .author a {
+  color: black;
+  text-decoration: none;
+}
 .drive-main .explorer {
   padding-left: 100px;
   padding-right: 100px;
@@ -346,6 +350,17 @@ body {
   text-align: right;
 }
 
+body > img {
+  width: 500px;
+  align-self: center;
+  margin-top: 150px;
+  position: absolute;
+}
+
+.login {
+  margin: auto;
+}
+
 body, html {
   margin: 0;
   font-family: "Inter", sans-serif;
@@ -369,6 +384,11 @@ button {
   font-weight: bold;
   font-size: 12pt;
   background: linear-gradient(279.5deg, #00B4FF 12.23%, #00F6FF 104.2%);
+}
+button.small {
+  margin: 0 !important;
+  padding: 0;
+  font-size: 14px;
 }
 button.no-gradient {
   background: none;
@@ -426,6 +446,7 @@ input {
 
 form {
   display: flex;
+  align-items: center;
   flex-direction: column;
 }
 form > input, form > button, form > div {

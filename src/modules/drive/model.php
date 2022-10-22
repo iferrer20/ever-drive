@@ -1,8 +1,11 @@
 <?php 
 
+require_once './modules/user/model.php';
+
 class DriveModel {
     public $name;
     public $password;
+    public $author;
 
     function get($name) {
         global $db;
@@ -10,6 +13,10 @@ class DriveModel {
         if ($result) {
             $this->name = $result['name'];
             $this->password = $result['password'];
+            if ($id = $result['user']) {
+                $this->author = new UserModel();
+                $this->author->get_byid($id);
+            }
             return true;
         } else {
             return false;
@@ -19,13 +26,17 @@ class DriveModel {
     function create($name, $password) {
         global $db;
         // Create drive if not found
-        $stmt = $db->prepare('INSERT INTO drive (name, password) VALUES (:name, :password);');
+        $stmt = $db->prepare('INSERT INTO drive (name, password, user) VALUES (:name, :password, :user);');
         $stmt->bindValue(':name', $name, SQLITE3_TEXT);
-        if ($password) {
-            $stmt->bindValue(':password', password_hash($password, PASSWORD_DEFAULT), SQLITE3_TEXT);
-        } else {
-            $stmt->bindValue(':password', NULL, SQLITE3_NULL);
+        $stmt->bindValue(':password', $password ? password_hash($password, PASSWORD_DEFAULT) : NULL, SQLITE3_TEXT);
+
+        $user_id = session('user_id');
+        $stmt->bindValue(':user', $user_id, SQLITE3_NUM);
+        if ($user_id) {
+            $this->author = new UserModel();
+            $this->author->get_byid($user_id);
         }
+
         $result = $stmt->execute();
         mkdir(DRIVES_DIR . $name);
 

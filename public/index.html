@@ -26,10 +26,7 @@
         <img src="img/logo.png" alt="">
         <h1>Ever Drive</h1>
       </div>
-      <div class="buttons">
-        <button modal-open="modal-drive-create">Crear drive ahora</button>
-        <button class="no-gradient" modal-open="modal-drive-access">Acceder al drive</button>
-      </div>
+      <button modal-open="modal-drive-create">Ir a mi drive</button>
     </div>
   </div>
   <div class="features">
@@ -91,20 +88,16 @@
   <!-- modals -->
   <div id="modal-drive-create" class="modal hidden">
     <form method="POST" action="/">
-      <h2>Crear Drive</h2>
+      <h2>Acceder al Drive</h2>
       <input placeholder="Nombre del drive" id="input-drivename" name="drivename" type="text">
-      <input class="self-left" type="checkbox" id="checkbox-enablepw">
-      <input class="input-password" name="password" placeholder="Contraseña" type="password" disabled>
+      <input class="input-password" name="password" placeholder="Contraseña" type="password">
       <script>
-        $('#checkbox-enablepw').change(function() {
-          $("#modal-drive-create .input-password").prop('disabled', !this.checked);
-        });
         $('#input-drivename').on('input', function() {
           $('#modal-drive-create').children().first().attr('action', '/' + $(this).val());
         });
       </script>
       <div class="buttons">
-        <button type="submit">Crear</button>
+        <button type="submit">Acceder</button>
         <button type="button" class="modal-close no-gradient black">Cancelar</button>
       </div>
     </form>

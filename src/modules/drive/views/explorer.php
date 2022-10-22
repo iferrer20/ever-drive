@@ -64,8 +64,10 @@ require 'header.php';
     <div class="path">Path</div>
     <div class="info">
         <div class="author">
-            <span class="material-icons-round">account_circle</span>
-            Anonymous
+            <a href="<?= $data->drive->author ? '/user/profile/' . $data->drive->author->name : '' ?>">
+                <span class="material-icons-round">account_circle</span>
+            </a>
+            <?= $data->drive->author?->name ?? 'Anónimo' ?>
         </div>
         <div class="drive">
             <span class="material-icons-round">cloud</span>
@@ -81,22 +83,22 @@ require 'header.php';
             <th>Filename</th>               
             <th>Size</th>
         </tr>
-<?php if (substr_count($GLOBALS['uri'], '/') > 0) : ?>
+    <?php if (substr_count($GLOBALS['uri'], '/') > 0) : ?>
         <tr class="entry folder">
             <td class="icon"><span class="material-icons-round folder">folder</td>
             <td class="name">..</td>
             <td class="size"></td>
         </tr>
-<?php endif; ?>
+    <?php endif; ?>
 
-<?php foreach (get_folders($data->path) as $folder) {
-?>
+    <?php foreach (get_folders($data->path) as $folder) {
+    ?>
         <tr class="entry folder">
             <td class="icon"><span class="material-icons-round">folder</span></td>
             <td class="name"><?= $folder->name ?></td>
             <td class="size"></td>
         </tr>
-<?php } ?>
+    <?php } ?>
 <?php foreach (get_files($data->path) as $file) {
 ?>
         <tr class="entry file">

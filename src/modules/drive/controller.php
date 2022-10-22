@@ -8,10 +8,11 @@ class DriveController {
     public $driveroot;
     public $path;
     public $password;
-    public $drivemodel;
+    public $drive;
+    static public $default_action = "read";
 
     private function grant_access() {
-        $_SESSION['drive'] = $this->drivename;
+        session_set('drive', $this->drivename);
     }
 
     function __construct() {
@@ -23,28 +24,32 @@ class DriveController {
             $this->path .= '/';
         }
         $this->password = $_POST['password'] ?? 0;
-        $this->drivemodel = new DriveModel();
+        $this->drive = new DriveModel();
 
         if (!preg_match('/^[A-Za-z0-9_]{0,32}$/', $this->drivename)) {
             render('invalid', $this);
         }
 
-        if (!$this->drivemodel->get($this->drivename)) {  // create drive if not exists 
-            $this->drivemodel->create($this->drivename, $this->password); 
+        if (!$this->drive->get($this->drivename)) {  // create drive if not exists 
+            $this->drive->create($this->drivename, $this->password); 
             $this->grant_access();
         }
         
-        if (empty($this->drivemodel->password)) { // If drive with no password, grant access
+        if (empty($this->drive->password)) { // If drive with no password, grant access
             $this->grant_access();
         }
 
         // Check Auth middleware controller
-        if (strcmp($_SESSION['drive'] ?? '', $this->drivename) && $action != 'auth') {
+        if (strcmp(session('drive'), $this->drivename) && $action != 'auth') {
             render('askpw', $this);
+        }
+
+        if ($id = session('user_id')) {
+            //$this->usermodel->get_byid($id);
         }
     }
 
-    function list() {
+    function read() {
         if (is_file($this->path)) {
             $mime_type = mime_content_type($this->path);
             header('Content-type: ' . $this->path);
@@ -59,14 +64,11 @@ class DriveController {
     }
 
     function auth() {
-        global $uri;
-        if ($this->drivemodel->check_password($this->password)) {
+        if ($this->drive->check_password($this->password)) {
             $this->grant_access();
-            header('Location: /' . $uri);
         } else {
             // Incorrect password
             http_response_code(403);
-            $incorrect_pw = true;
             render('askpw', $this);
         }
     }
@@ -116,7 +118,7 @@ class DriveController {
         
         shell_exec("mv '$from_path' '$to_path'"); // Move 
     }
-};
+}
 
 
 ?>
