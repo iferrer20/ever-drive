@@ -406,8 +406,8 @@ input {
   background-color: rgba(0, 0, 0, 0.582);
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100%;
+  height: 100%;
 }
 .shadow .no-transition {
   transition-duration: 0s, 0s;
@@ -415,13 +415,13 @@ input {
 
 .transition-visibility {
   opacity: 1;
-  transition-property: opacity, visibility;
-  transition-timing-function: ease-in-out, step-end;
-  transition-duration: 0.3s, 0s;
+  transition-property: opacity, visibility, height;
+  transition-timing-function: ease-in-out, step-end, step-end;
+  transition-duration: 0.3s, 0s, 0s;
 }
 .transition-visibility.hidden {
   opacity: 0;
-  transition-duration: 0.3s, 0.3s;
+  transition-duration: 0.3s, 0.3s, 0.3s;
 }
 
 form {
@@ -456,5 +456,5 @@ form > input, form > button, form > div {
 
 .hidden {
   visibility: hidden;
-  height: 0;
+  height: 0px;
 }

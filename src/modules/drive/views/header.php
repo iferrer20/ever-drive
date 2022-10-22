@@ -29,4 +29,4 @@
     account_circle
     </span>
 </div>
-<div class="shadow hidden transition-visibility"></div>
+<div draggable="false" class="shadow hidden transition-visibility"></div>

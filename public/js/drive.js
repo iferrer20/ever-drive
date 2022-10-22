@@ -1,4 +1,9 @@
+'use strict';
 
+// Show modal open if needed
+if ($('#ask-password').length) { 
+    modalOpen('ask-password');
+}
 
 var selected_entry;
 var drag_entry;
@@ -57,32 +62,34 @@ function submiFile() {
     $('#submit-form').submit();
 }
 
-$(document).on('dragover', (event) => {
+// Drag an drop files
+var drag_counter = 0;
+$(document).on('drag dragstart dragend dragover dragenter dragleave drop', e => {
+    e.preventDefault();
+    e.stopPropagation();
+})
+.on('dragenter', () => {
     $('#upload-file-card').removeClass('hidden');
     $('.shadow').removeClass('hidden');
-    console.log('a')
-    event.preventDefault();
-    event.stopPropagation();
-});
-
-$(document).on('drop', (event) => {
-    $(document).trigger('dragleave');
+    drag_counter++;
+})
+.on('drop', (event) => {
     $('#input-file').prop('files', event.originalEvent.dataTransfer.files);
     submiFile();
     return false;
-});
-
-$(document).on('dragleave', (event) => {
-    console.log('b')
+})
+.on('dragleave drop', () => {
+    if (--drag_counter) return;
     $('#upload-file-card').addClass('hidden');
-    $('.shadow').addClass('hidden');
-    drag_file = false;
+    $('.shadow').addClass('hidden');    
 });
 
+// Double click
 var last_click = {};
 var drag = false;
 const entries = $('.explorer .entry');
 entries.on('mousedown', function(event) {
+    if (event.which != 1) return;
     drag = true;
     selectEntry($(this));
     if (Date.now()-last_click.t < 400 && entries.index(selected_entry) == entries.index(last_click.selected)) {
@@ -90,16 +97,6 @@ entries.on('mousedown', function(event) {
     }
     last_click = { t: Date.now(), selected: $(this), x: event.clientX, y: event.clientY };
     drag = true;
-});
-
-$(document).on('mouseup', () => {
-    drag_entry?.remove();
-    drag_entry = undefined;
-    drag = false;
-
-    if (hover_entry?.hasClass('folder') && !selected_entry.is(hover_entry)) {
-        moveEntry(hover_entry.find('.name').text());
-    }
 });
 
 entries.mouseover(function() {
@@ -111,6 +108,7 @@ entries.mouseleave(function() {
     hover_entry = undefined;
 });
 
+// Possibility to drag files or folders and move them to other folders
 $(document).on('mousemove', event => {
     if (!drag) return;
     if (!drag_entry) {
@@ -123,8 +121,18 @@ $(document).on('mousemove', event => {
     drag_entry.css('transform', `translate(${entry_pos.left + offset.x}px, ${entry_pos.top + offset.y}px)`);
     drag_entry.css('width', `${selected_entry.width()}px`);
     drag_entry.css('height', `${selected_entry.height()}px`);
+})
+.on('mouseup', () => {
+    drag_entry?.remove();
+    drag_entry = undefined;
+    drag = false;
+
+    if (hover_entry?.hasClass('folder') && !selected_entry.is(hover_entry)) { 
+        moveEntry(hover_entry.find('.name').text()); // Move entry to another folder
+    }
 });
 
+// Possibility jkl arrow navigation
 $(document).keydown(function(event) {
     let new_selected = '';
     if (!$('.explorer tr').length) return
@@ -155,50 +163,48 @@ $(document).keydown(function(event) {
     if (new_selected.length) selectEntry(new_selected);
 });
 
-if ($('#ask-password').length) modalOpen('ask-password');
+// Setup explorer
+// Context menu (left click menu)
+let current_context_menu;
+let context_menu_default = $('#context-menu-default');
+let context_menu_folder = $('#context-menu-folder');
+let context_menu_file = $('#context-menu-file');
 
-if ($('.explorer').length) {
-    let current_context_menu;
-    let context_menu_default = $('#context-menu-default');
-    let context_menu_folder = $('#context-menu-folder');
-    let context_menu_file = $('#context-menu-file');
-
-    function showContextMenu(cm, event) {
-        current_context_menu?.addClass('hidden');
-        cm.css('transform', `translate(${event.clientX}px, ${event.clientY}px)`);
-        cm.removeClass('hidden');
-        current_context_menu = cm;
-    }
-    
-    $('body').contextmenu(event => {
-        if (event.target != document.body && event.target.className != 'explorer') return;
-        deselectEntry();
-        showContextMenu(context_menu_default, event);
-        return false;
-    }).click((event) => {
-        current_context_menu?.addClass('hidden');
-        if (event.target == document.body) deselectEntry();
-    });
-
-    $('.entry').contextmenu(event => {
-        selectEntry($(event.currentTarget));
-    });
-
-    $('.entry.folder').contextmenu(event => {
-        showContextMenu(context_menu_folder, event);
-        return false;
-    });
-
-    $('.entry.file').contextmenu(event => {
-        showContextMenu(context_menu_file, event);
-        return false;
-    })
-
-    $('.create-folder').click(createFolder);
-    $('.submit-file').click(selecFile);
-    $('#input-file').change(submiFile);
-
-    $('.del-folder').click(deleteFolder); 
-    $('.del-file').click(deleteFile);
+function showContextMenu(cm, event) {
+    current_context_menu?.addClass('hidden');
+    cm.css('transform', `translate(${event.clientX}px, ${event.clientY}px)`);
+    cm.removeClass('hidden');
+    current_context_menu = cm;
 }
+
+$('body').contextmenu(event => {
+    if (event.target != document.body && event.target.className != 'explorer') return;
+    deselectEntry();
+    showContextMenu(context_menu_default, event);
+    return false;
+}).click((event) => {
+    current_context_menu?.addClass('hidden');
+    if (event.target == document.body) deselectEntry();
+});
+
+$('.entry').contextmenu(event => {
+    selectEntry($(event.currentTarget));
+});
+
+$('.entry.folder').contextmenu(event => {
+    showContextMenu(context_menu_folder, event);
+    return false;
+});
+
+$('.entry.file').contextmenu(event => {
+    showContextMenu(context_menu_file, event);
+    return false;
+})
+
+$('.create-folder').click(createFolder);
+$('.submit-file').click(selecFile);
+$('#input-file').change(submiFile);
+
+$('.del-folder').click(deleteFolder); 
+$('.del-file').click(deleteFile);
 
