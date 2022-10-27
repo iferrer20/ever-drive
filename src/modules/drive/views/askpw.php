@@ -3,7 +3,6 @@ require 'header.php';
 ?>
 <div id="ask-password" class="modal">
     <form method="POST">
-        <input type="hidden" name="action" value="auth">
         <h2>Introduce la contraseña</h2>
 <?php if ($incorrect_pw ?? false) : ?>
          Incorrect password

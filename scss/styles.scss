@@ -1,9 +1,10 @@
 @import 'palette';
 @import 'media-queries';
 @import 'mixins';
-@import 'drive';
+@import 'explorer';
 @import 'home';
 @import 'user';
+@import 'profile';
 
 body, html {
   margin: 0;
@@ -119,4 +120,20 @@ form {
 .hidden {
   visibility: hidden;
   height: 0px;
+}
+
+.m-auto {
+  margin: auto;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.a-center {
+  align-items: center;
+}
+
+.f-dir-column {
+  flex-direction: column;
 }

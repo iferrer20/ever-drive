@@ -1,4 +1,5 @@
 <?php
+$title = 'Acceso';
 require 'header.php';
 ?>
 <img src="/img/logo_horizontal.png" alt="logo">

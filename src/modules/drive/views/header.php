@@ -25,8 +25,8 @@
 <div class="header">           
     <img src="/img/logo_horizontal.png" alt="logo">
     <input type="text" placeholder="Buscar en drive">
-    <span class="material-icons-round">
+    <a class="avatar" href="<?= $data->user ? '/user/profile/' . $data->user->name : '/user/signin' ?>"><span class="material-icons-round">
     account_circle
-    </span>
+    </span></a>
 </div>
 <div draggable="false" class="shadow hidden transition-visibility"></div>

@@ -6,6 +6,7 @@ if ($('#ask-password').length) {
 }
 
 var selected_entry;
+var selected_entry_name;
 var drag_entry;
 var hover_entry;
 
@@ -13,7 +14,7 @@ function selectEntry(entry, remove = true) {
     selected_entry = entry;
     if (remove) $('.selected').removeClass('selected');  
     entry.addClass('selected');
-    $('.input-selected-entry').val($('.selected .name').text());
+    selected_entry_name = $('.selected .name').text();
 }
 
 function hoverEntry(entry) {
@@ -37,21 +38,8 @@ function openEntry(entry) {
     }
 }
 
-function createFolder() {
-    modalOpen('modal-create-folder');
-}
-
-function deleteFolder() {
-    modalOpen('modal-del-folder');
-}
-
-function deleteFile() {
-    modalOpen('modal-del-file');
-}
-
 function moveEntry(destination) {
-    $('.input-destination').val(destination);
-    $('#move-entry').click();
+    $.post('', {action: 'move', from: selected_entry_name, to: destination}).then(() => location.reload());
 }
 
 function selecFile() {
@@ -60,6 +48,10 @@ function selecFile() {
 
 function submiFile() {
     $('#submit-form').submit();
+}
+
+function downloadFile() {
+    openEntry(selected_entry);
 }
 
 // Drag an drop files
@@ -201,10 +193,6 @@ $('.entry.file').contextmenu(event => {
     return false;
 })
 
-$('.create-folder').click(createFolder);
 $('.submit-file').click(selecFile);
 $('#input-file').change(submiFile);
-
-$('.del-folder').click(deleteFolder); 
-$('.del-file').click(deleteFile);
-
+$('.download-file').click(downloadFile);

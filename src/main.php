@@ -1,10 +1,18 @@
 <?php 
 
+session_start();
+
+define('DATA_DIR', '/home/www-data/');
+define('DRIVES_DIR', DATA_DIR . 'drives/');
+define('PROFILES_DIR', DATA_DIR . 'profiles/');
+define('DEFAULT_MODULE', 'drive');
+
+require './db.php';
 require './utils.php';
 
-session_start();
-define('DRIVES_DIR', '/home/www-data/');
-define('DEFAULT_MODULE', 'drive');
+if (!is_dir(DRIVES_DIR)) {
+    mkdir(DRIVES_DIR);
+}
 
 $uri = secure_format(rtrim(substr(urldecode($_SERVER['REQUEST_URI']), 1), '/'));
 $uri_arr = explode('/', $uri);

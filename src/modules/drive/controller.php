@@ -1,6 +1,5 @@
 <?php 
 
-require 'db.php';
 require 'model.php';
 
 class DriveController {
@@ -9,6 +8,7 @@ class DriveController {
     public $path;
     public $password;
     public $drive;
+    public $user;
     static public $default_action = "read";
 
     private function grant_access() {
@@ -34,22 +34,21 @@ class DriveController {
             $this->drive->create($this->drivename, $this->password); 
             $this->grant_access();
         }
-        
-        if (empty($this->drive->password)) { // If drive with no password, grant access
-            $this->grant_access();
-        }
 
-        // Check Auth middleware controller
-        if (strcmp(session('drive'), $this->drivename) && $action != 'auth') {
+        if (empty($this->drive->password) || (post('password') && $this->drive->check_password($this->password))) {
+            $this->grant_access();
+        } else if (strcmp(session('drive'), $this->drivename)) {
+            http_response_code(403);
             render('askpw', $this);
         }
 
         if ($id = session('user_id')) {
-            //$this->usermodel->get_byid($id);
+            $this->user = new UserModel();
+            $this->user->get_byid($id);
         }
     }
 
-    function read() {
+    function read() { // Read files from folder
         if (is_file($this->path)) {
             $mime_type = mime_content_type($this->path);
             header('Content-type: ' . $this->path);
@@ -63,27 +62,7 @@ class DriveController {
         render('explorer', $this);
     }
 
-    function auth() {
-        if ($this->drive->check_password($this->password)) {
-            $this->grant_access();
-        } else {
-            // Incorrect password
-            http_response_code(403);
-            render('askpw', $this);
-        }
-    }
-
-    function delfile() {
-        $filepath = secure_path($this->driveroot, $this->path . $_POST['name']);
-        
-        if (!is_file($filepath)) {
-            return;
-        }
-
-        unlink($filepath); // Remove file
-    }
-
-    function submitfile() {
+    function submitfile() { // Submit files
         $total = count($_FILES['file']['name']);
         for( $i=0 ; $i < $total ; $i++ ) {
             $name = $_FILES['file']['name'][$i];
@@ -93,7 +72,7 @@ class DriveController {
         }
     }
 
-    function newfolder() {
+    function newfolder() { // New Folder
         $folderpath = secure_path($this->driveroot, $this->path . $_POST['name']);
         if (is_dir($folderpath)) {
             return;
@@ -102,17 +81,12 @@ class DriveController {
         mkdir($folderpath);
     }
 
-    function delfolder() {
+    function del() { // Delete entry
         $folderpath = secure_path($this->driveroot, $this->path . $_POST['name']);
-        
-        if (!is_dir($folderpath)) {
-            return;
-        }
-
-        shell_exec("rm -rf '$folderpath'"); // Remove folder
+        shell_exec("rm -rf '$folderpath'"); // Remove 
     }
 
-    function move() {
+    function move() { // Move entry
         $from_path = secure_path($this->driveroot, $this->path . $_POST['from']);
         $to_path = secure_path($this->driveroot, $this->path . $_POST['to']);
         

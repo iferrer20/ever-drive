@@ -19,7 +19,7 @@
     <script src="/js/index.js" async></script>
     <script src="/js/drive.js" async></script>
 
-    <title>Ever drive - Login</title>
+    <title>Ever drive - <?= $title ?></title>
 </head>
 <body>
 <div draggable="false" class="shadow hidden transition-visibility"></div>

@@ -1,8 +1,9 @@
 <?php
 
-$dbpath = DRIVES_DIR . 'everdrive.db';
-$dbexists = is_file($dbpath);
-$db = new SQLite3($dbpath);
+define('DB_PATH', DATA_DIR . 'everdrive.db');
+
+$dbexists = is_file(DB_PATH);
+$db = new SQLite3(DB_PATH);
 $db->enableExceptions(true);
 
 if (!$dbexists) {
@@ -16,7 +17,7 @@ CREATE TABLE users (
 );
 CREATE UNIQUE INDEX unique_users_name ON users (name);
 
-CREATE TABLE drive (
+CREATE TABLE drives (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     user INTEGER,
     name VARCHAR(32) NOT NULL, 

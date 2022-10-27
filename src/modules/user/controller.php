@@ -1,6 +1,5 @@
 <?php 
 
-require 'db.php';
 require 'model.php';
 
 class UserController {
@@ -61,11 +60,11 @@ class UserController {
 
     function profile() {
         if (!$this->usermodel->get(uri(2))) {
+            http_response_code(404);
             render('profilenotfound');
         }
         
         render('profile', $this->usermodel);
-        
     }
 };
 

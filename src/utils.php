@@ -34,6 +34,21 @@ function secure_path($root, $str) {
     return $path;
 }
 
+function format_bytes($bytes, $decimals = 2) {
+    $unit_list = array('B', 'KB', 'MB', 'GB', 'PB');
+  
+    if ($bytes == 0) {
+      return $bytes . ' ' . $unit_list[0];
+    }
+  
+    $unit_count = count($unit_list);
+    for ($i = $unit_count - 1; $i >= 0; $i--) {
+      $power = $i * 10;
+      if (($bytes >> $power) >= 1)
+        return round($bytes / (1 << $power), $decimals) . ' ' . $unit_list[$i];
+    }
+}
+
 function render($str, $data = array()) {
     global $path_controller;
     require $path_controller . '/views/' . $str . '.php';
@@ -61,8 +76,12 @@ function session_set($str, $value) {
     $_SESSION[$str] = $value;
 }
 
-function uri($i) {
+function uri($i = -1) {
+    global $uri;
     global $uri_arr;
+    if ($i < 0) {
+        return $uri;
+    }
     return $uri_arr[$i];
 }
 

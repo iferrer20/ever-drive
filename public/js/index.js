@@ -2,7 +2,7 @@
 
 // Modal
 var shadow = $('.shadow');
-$('button[modal-open]').each(function() {
+$('[modal-open]').each(function() {
     let modal = $('#' + $(this).attr('modal-open'));
     $(this).click(() => {
         modal.add(shadow).removeClass('hidden');
@@ -13,6 +13,11 @@ $('button[modal-open]').each(function() {
 $('.modal-close').click(() => {
     $('.modal').add(shadow).addClass('hidden');
     $(document.body).css('overflow', '');
+});
+
+$('.timedate').each(function() {
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    $(this).text(new Date($(this).html()).toLocaleDateString('es-ES', options));
 });
 
 function modalOpen(id) {

@@ -9,7 +9,7 @@ class DriveModel {
 
     function get($name) {
         global $db;
-        $result = $db->query("SELECT * FROM drive WHERE name = '$name';")->fetchArray();
+        $result = $db->query("SELECT * FROM drives WHERE name = '$name';")->fetchArray();
         if ($result) {
             $this->name = $result['name'];
             $this->password = $result['password'];
@@ -26,7 +26,7 @@ class DriveModel {
     function create($name, $password) {
         global $db;
         // Create drive if not found
-        $stmt = $db->prepare('INSERT INTO drive (name, password, user) VALUES (:name, :password, :user);');
+        $stmt = $db->prepare('INSERT INTO drives (name, password, user) VALUES (:name, :password, :user);');
         $stmt->bindValue(':name', $name, SQLITE3_TEXT);
         $stmt->bindValue(':password', $password ? password_hash($password, PASSWORD_DEFAULT) : NULL, SQLITE3_TEXT);
 

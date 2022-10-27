@@ -47,12 +47,6 @@
       font-size: 40px;
       margin-right: 10px;
     }
-    .author {
-      a {
-        color: black;
-        text-decoration: none;
-      }
-    }
   }
 
   .explorer {
@@ -78,6 +72,11 @@
         position: absolute;
         opacity: 0.7;
         pointer-events: none;
+        display: flex;
+        align-items: center;
+        * {
+          margin-left: 5px;
+        }
       }
 
       th {
@@ -113,9 +112,22 @@
             font-size: 50px;
           }
         }
+        .thumbnail {
+          display: flex;
+          img {
+            margin: auto;
+            height: 50px;
+            text-align: center;
+          }
+        }
       }
     }
   }
+}
+
+.avatar {
+  color: black;
+  text-decoration: none;
 }
 
 .notfound {
@@ -136,7 +148,6 @@
   z-index: 10;
   box-shadow: 0px 0px 26px -8px rgba(0,0,0,0.75);
   border-radius: 10px;
-  width: 150px;
 
   div {
     padding: 10px;

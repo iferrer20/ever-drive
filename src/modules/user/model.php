@@ -33,6 +33,14 @@ class UserModel {
         return $this->fetchResult($stmt->execute());
     }
 
+    function get_own_drives() {
+        global $db;
+        $stmt = $db->prepare('SELECT * FROM drives WHERE user = :id;');
+        $stmt->bindValue(':id', $this->id, SQLITE3_NUM);
+        $result = $stmt->execute();
+        return $result;
+    }
+
     function create($name, $email, $password) {
         global $db;
 
@@ -68,6 +76,10 @@ class UserModel {
 
     function check_password($pw) {
         return password_verify($pw, $this->password);
+    }
+
+    function has_pfp() {
+        return is_file(PROFILES_DIR . $this->id);
     }
 }
 
