@@ -89,13 +89,8 @@
   <div id="modal-drive-create" class="modal hidden">
     <form method="POST" action="/">
       <h2>Acceder al Drive</h2>
-      <input placeholder="Nombre del drive" id="input-drivename" name="drivename" type="text">
+      <input placeholder="Nombre del drive" oninput="$(this).parent().attr('action', '/' + $(this).val())" name="drivename" type="text">
       <input class="input-password" name="password" placeholder="Contraseña" type="password">
-      <script>
-        $('#input-drivename').on('input', function() {
-          $('#modal-drive-create').children().first().attr('action', '/' + $(this).val());
-        });
-      </script>
       <div class="buttons">
         <button type="submit">Acceder</button>
         <button type="button" class="modal-close no-gradient black">Cancelar</button>

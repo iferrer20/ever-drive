@@ -17,7 +17,7 @@ class DriveController {
 
     function __construct() {
         global $uri, $uri_arr, $action;
-        $this->drivename = $uri_arr[1];
+        $this->drivename = $_POST['drivename'] ?? $uri_arr[1];
         $this->driveroot = DRIVES_DIR . $this->drivename;
         $this->path = DRIVES_DIR . $uri;
         if (is_dir($this->path)) {
@@ -51,7 +51,7 @@ class DriveController {
     function read() { // Read files from folder
         if (is_file($this->path)) {
             $mime_type = mime_content_type($this->path);
-            header('Content-type: ' . $this->path);
+            header('Content-type: ' . $mime_type);
             readfile($this->path);
             return;
         } 
@@ -84,6 +84,14 @@ class DriveController {
     function del() { // Delete entry
         $folderpath = secure_path($this->driveroot, $this->path . $_POST['name']);
         shell_exec("rm -rf '$folderpath'"); // Remove 
+    }
+
+    function deldrive() {
+        if ($this->user->id != $this->drive->author?->id) {
+            return;
+        }
+        $this->drive->delete();
+        shell_exec("rm -rf '$this->driveroot'"); // Remove
     }
 
     function move() { // Move entry

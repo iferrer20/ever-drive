@@ -13,6 +13,9 @@ require './utils.php';
 if (!is_dir(DRIVES_DIR)) {
     mkdir(DRIVES_DIR);
 }
+if (!is_dir(PROFILES_DIR)) {
+    mkdir(PROFILES_DIR);
+}
 
 $uri = secure_format(rtrim(substr(urldecode($_SERVER['REQUEST_URI']), 1), '/'));
 $uri_arr = explode('/', $uri);
@@ -36,5 +39,5 @@ if (method_exists($controller, $action)) {
     $controller->{$controller::$default_action}();
 } 
 
-header('Location: /' . $uri);
+header('Location: ' . referrer());
 ?>

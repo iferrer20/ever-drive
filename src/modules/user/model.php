@@ -41,6 +41,24 @@ class UserModel {
         return $result;
     }
 
+    function has_drives() {
+        global $db;
+        $stmt = $db->prepare('SELECT COUNT(*) > 0 FROM drives WHERE user = :id;');
+        $stmt->bindValue(':id', $this->id, SQLITE3_NUM);
+        $result = $stmt->execute()->fetchArray()[0];
+        return $result;
+    }
+
+    function update() {
+        global $db;
+        $stmt = $db->prepare('UPDATE users SET name = :name, email = :email, password = :password WHERE id = :id;');
+        $stmt->bindValue(':name', $this->name, SQLITE3_TEXT);
+        $stmt->bindValue(':email', $this->email, SQLITE3_TEXT);
+        $stmt->bindValue(':password', $this->password, SQLITE3_TEXT);
+        $stmt->bindValue(':id', $this->id, SQLITE3_NUM);
+        $stmt->execute();
+    }
+
     function create($name, $email, $password) {
         global $db;
 
@@ -56,11 +74,13 @@ class UserModel {
             throw new BadRequestException('Contraseña inválida');
         }
 
+        $this->set_password($password);
+
         // Create drive if not found
         $stmt = $db->prepare('INSERT INTO users (name, email, password) VALUES (:name, :email, :password);');
         $stmt->bindValue(':name', $name, SQLITE3_TEXT);
         $stmt->bindValue(':email', $email, SQLITE3_TEXT);
-        $stmt->bindValue(':password', password_hash($password, PASSWORD_DEFAULT), SQLITE3_TEXT);
+        $stmt->bindValue(':password', $password, SQLITE3_TEXT);
         try {
             $result = $stmt->execute();
         } catch(Exception) {
@@ -72,6 +92,10 @@ class UserModel {
         $this->email = $email;
         $this->password = $password;
         $this->id = $db->lastInsertRowID();
+    }
+
+    function set_password($pw) {
+        $this->password = password_hash($pw, PASSWORD_DEFAULT);
     }
 
     function check_password($pw) {

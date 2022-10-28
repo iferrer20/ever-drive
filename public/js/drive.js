@@ -15,6 +15,7 @@ function selectEntry(entry, remove = true) {
     if (remove) $('.selected').removeClass('selected');  
     entry.addClass('selected');
     selected_entry_name = $('.selected .name').text();
+    $('.input-selected-entry').val(selected_entry_name);
 }
 
 function hoverEntry(entry) {

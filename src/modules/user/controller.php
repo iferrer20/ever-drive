@@ -3,22 +3,22 @@
 require 'model.php';
 
 class UserController {
-    public $usermodel;
+    public $user;
 
     function __construct() {
-        $this->usermodel = new UserModel();
+        $this->user = new UserModel();
     }
 
     private function grant_session() {
-        $_SESSION['user_id'] = $this->usermodel->id;
+        $_SESSION['user_id'] = $this->user->id;
     }
 
-    function check_auth() {
-        if ($id = $_SESSION['user_id']) {
-            $this->usermodel->get_byid($id);
+    function check_auth($redirect = true) {
+        if ($id = session('user_id')) {
+            $this->user->get_byid($id);
             return true;
         } else {
-            redirect('user/signin');
+            if ($redirect) redirect('user/signin');
         }
     }
 
@@ -30,7 +30,7 @@ class UserController {
         $username = post('username');
         $password = post('password');
 
-        if (!$this->usermodel->get($username) || !$this->usermodel->check_password($password)) {
+        if (!$this->user->get($username) || !$this->user->check_password($password)) {
             http_response_code(403);
             render('signin', array('error' => 'Invalid username or password'));
         }
@@ -49,7 +49,7 @@ class UserController {
         $password = post('password');
     
         try {
-            $this->usermodel->create($username, $email, $password);
+            $this->user->create($username, $email, $password);
         } catch(BadRequestException $e) {
             render('signup', array('error' => $e->getMessage()));
         }
@@ -58,13 +58,44 @@ class UserController {
         redirect('user/profile/' . $username);
     }
 
+    function update() {
+        $this->check_auth();
+
+        $this->user->name = post('name');
+        $this->user->email = post('email');
+        if ($pw = post('password')) {
+            $this->user->set_password($pw);
+        }
+        $this->user->update();
+        if ($file = getfile('pfp')) {
+            move_uploaded_file($file['tmp_name'], PROFILES_DIR . $this->user->id);
+        }
+
+        redirect('user/profile/' . $this->user->name);
+    }
+
     function profile() {
-        if (!$this->usermodel->get(uri(2))) {
+        $user = new UserModel();
+        if (!$user->get(uri(2))) {
             http_response_code(404);
             render('profilenotfound');
         }
+
+        $this->check_auth(false);
         
-        render('profile', $this->usermodel);
+        render('profile', (object) array(
+            'perms' => $this->user->id == $user->id,
+            'user' => $user
+        ));
+    }
+
+    function pfp() {
+        $user = new UserModel();
+        $user->get_byid(uri(2));
+        $path = PROFILES_DIR . $user->id;
+        $mime_type = mime_content_type($path);
+        header('Content-type: ' . $mime_type);
+        readfile($path);
     }
 };
 

@@ -82,7 +82,15 @@ function uri($i = -1) {
     if ($i < 0) {
         return $uri;
     }
-    return $uri_arr[$i];
+    return $uri_arr[$i] ?? '';
+}
+
+function getfile($str) {
+    return $_FILES[$str] ?? NULL;
+}
+
+function referrer() {
+    return $_SERVER['HTTP_REFERER'];
 }
 
 ?>

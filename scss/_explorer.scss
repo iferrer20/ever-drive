@@ -20,6 +20,11 @@
     font-size: 50px;
     margin-left: 200px;
   }
+
+  .pfp {
+    width: 70px;
+    height: 70px;
+  }
 }
 
 .drive-main {
@@ -46,6 +51,14 @@
     span {
       font-size: 40px;
       margin-right: 10px;
+    }
+    .pfp {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: block;
+      background-position: center;
+      background-size: cover;
     }
   }
 

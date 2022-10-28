@@ -134,6 +134,32 @@ form {
   align-items: center;
 }
 
+.a-start {
+  align-items: flex-start;
+}
+
 .f-dir-column {
   flex-direction: column;
+}
+
+a {
+  color: unset;
+  text-decoration: none;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.driveicon {
+  color: $cmain;
+  font-size: 40px;
+  padding-right: 10px;
+}
+
+.pfp {
+  background-position: center;
+  background-size: cover;
+  border-radius: 50%;
+  display: block;
 }

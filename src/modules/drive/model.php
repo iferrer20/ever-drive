@@ -44,6 +44,13 @@ class DriveModel {
         $this->password = $password;
     }
 
+    function delete() {
+        global $db;
+        $stmt = $db->prepare('DELETE FROM drives WHERE name = :name;');
+        $stmt->bindValue(':name', $this->name, SQLITE3_TEXT);
+        $stmt->execute();
+    }
+
     function check_password($pw) {
         return password_verify($pw, $this->password);
     }
