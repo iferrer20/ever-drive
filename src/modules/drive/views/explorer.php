@@ -69,7 +69,7 @@ require 'header.php';
     <div class="info">
         <div class="author">
             <a class="avatar" href="<?= $data->drive->author ? '/user/profile/' . $data->drive->author->name : '' ?>">
-            <?php if ($data->drive->author->has_pfp()): ?>
+            <?php if ($data->drive->author?->has_pfp()): ?>
                 <span class="pfp" style="background-image: url('/user/pfp/<?= $data->drive->author->id; ?>')"></span>
             <?php else: ?>
                 <span class="pfp material-icons-round">account_circle</span>
@@ -79,7 +79,7 @@ require 'header.php';
         </div>
         <div>
             <span class="driveicon material-icons-round">cloud</span>
-            <?= $data->drivename ?>
+            <?= $data->drive->name ?>
         </div> 
     </div>
 

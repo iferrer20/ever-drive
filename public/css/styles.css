@@ -399,8 +399,6 @@ body > img {
 .profile .pfp {
   width: 100px;
   height: 100px;
-}
-.profile .pfp span {
   font-size: 100px;
 }
 .profile table {

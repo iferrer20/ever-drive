@@ -3,8 +3,6 @@
 require 'model.php';
 
 class DriveController {
-    public $drivename;
-    public $driveroot;
     public $path;
     public $password;
     public $drive;
@@ -12,32 +10,41 @@ class DriveController {
     static public $default_action = "read";
 
     private function grant_access() {
-        session_set('drive', $this->drivename);
+        session_set('drive', $this->drive->name);
+    }
+
+    function check_owner() { // Midleware
+        if ($this->user->id != $this->drive->author?->id) {
+            die();
+        }
     }
 
     function __construct() {
         global $uri, $uri_arr, $action;
-        $this->drivename = $_POST['drivename'] ?? $uri_arr[1];
-        $this->driveroot = DRIVES_DIR . $this->drivename;
+        $drivename = $_POST['drivename'] ?? $uri_arr[1];
         $this->path = DRIVES_DIR . $uri;
         if (is_dir($this->path)) {
             $this->path .= '/';
         }
-        $this->password = $_POST['password'] ?? 0;
+        $password = $_POST['password'] ?? 0;
         $this->drive = new DriveModel();
 
-        if (!preg_match('/^[A-Za-z0-9_]{0,32}$/', $this->drivename)) {
-            render('invalid', $this);
+        if (!preg_match('/^[A-Za-z0-9_]{0,32}$/', $drivename)) {
+            render('invalid', (object) array(
+                'drive' => (object) array(
+                    'name' => $drivename
+                )
+            ));
         }
 
-        if (!$this->drive->get($this->drivename)) {  // create drive if not exists 
-            $this->drive->create($this->drivename, $this->password); 
+        if (!$this->drive->get($drivename)) {  // create drive if not exists 
+            $this->drive->create($drivename, $password); 
             $this->grant_access();
         }
 
-        if (empty($this->drive->password) || (post('password') && $this->drive->check_password($this->password))) {
+        if (empty($this->drive->password) || (post('password') && $this->drive->check_password($password))) {
             $this->grant_access();
-        } else if (strcmp(session('drive'), $this->drivename)) {
+        } else if (strcmp(session('drive'), $this->drive->name)) {
             http_response_code(403);
             render('askpw', $this);
         }
@@ -67,13 +74,13 @@ class DriveController {
         for( $i=0 ; $i < $total ; $i++ ) {
             $name = $_FILES['file']['name'][$i];
             $tmp_path = $_FILES['file']['tmp_name'][$i];
-            $filepath = secure_path($this->driveroot, $this->path . $name);
+            $filepath = secure_path($this->drive->root, $this->path . $name);
             move_uploaded_file($tmp_path, $filepath);
         }
     }
 
     function newfolder() { // New Folder
-        $folderpath = secure_path($this->driveroot, $this->path . $_POST['name']);
+        $folderpath = secure_path($this->drive->root, $this->path . $_POST['name']);
         if (is_dir($folderpath)) {
             return;
         }
@@ -81,8 +88,20 @@ class DriveController {
         mkdir($folderpath);
     }
 
+    function update() {
+        $this->check_owner();
+        $this->drive->name = post('name');
+        $pw = post('password');
+        if ($pw) {
+            $this->drive->set_password($pw);
+        } else if ($pw === '') {
+            $this->drive->password = NULL;
+        }
+        $this->drive->update();
+    }
+
     function del() { // Delete entry
-        $folderpath = secure_path($this->driveroot, $this->path . $_POST['name']);
+        $folderpath = secure_path($this->drive->root, $this->path . $_POST['name']);
         shell_exec("rm -rf '$folderpath'"); // Remove 
     }
 
@@ -91,12 +110,13 @@ class DriveController {
             return;
         }
         $this->drive->delete();
-        shell_exec("rm -rf '$this->driveroot'"); // Remove
+        $path = $this->drive->root;
+        shell_exec("rm -rf '$path'"); // Remove
     }
 
     function move() { // Move entry
-        $from_path = secure_path($this->driveroot, $this->path . $_POST['from']);
-        $to_path = secure_path($this->driveroot, $this->path . $_POST['to']);
+        $from_path = secure_path($this->drive->root, $this->path . $_POST['from']);
+        $to_path = secure_path($this->drive->root, $this->path . $_POST['to']);
         
         shell_exec("mv '$from_path' '$to_path'"); // Move 
     }

@@ -3,16 +3,20 @@
 require_once './modules/user/model.php';
 
 class DriveModel {
+    public $id;
     public $name;
     public $password;
     public $author;
+    public $root;
 
     function get($name) {
         global $db;
         $result = $db->query("SELECT * FROM drives WHERE name = '$name';")->fetchArray();
         if ($result) {
+            $this->id = $result['id'];
             $this->name = $result['name'];
             $this->password = $result['password'];
+            $this->root = DRIVES_DIR . $this->name;
             if ($id = $result['user']) {
                 $this->author = new UserModel();
                 $this->author->get_byid($id);
@@ -44,11 +48,27 @@ class DriveModel {
         $this->password = $password;
     }
 
+    function update() {
+        global $db;
+        $stmt = $db->prepare('UPDATE drives SET name = :name, password = :password WHERE id = :id;');
+        $stmt->bindValue(':id', $this->id, SQLITE3_NUM);
+        $stmt->bindValue(':name', $this->name, SQLITE3_TEXT);
+        $stmt->bindValue(':password', $this->password, SQLITE3_TEXT);
+        $stmt->execute();
+        $root = DRIVES_DIR . $this->name;
+        shell_exec("mv '$this->root' '$root'"); // Move 
+        $this->root = $root;
+    }
+
     function delete() {
         global $db;
         $stmt = $db->prepare('DELETE FROM drives WHERE name = :name;');
         $stmt->bindValue(':name', $this->name, SQLITE3_TEXT);
         $stmt->execute();
+    }
+
+    function set_password($pw) {
+        $this->password = password_hash($pw, PASSWORD_DEFAULT);
     }
 
     function check_password($pw) {

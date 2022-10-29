@@ -14,7 +14,7 @@ require 'header.php';
 
 <form class="modal hidden a-start" id="modal-edit-user" action="/user/update/" method="POST" enctype="multipart/form-data">
     <h3>Nombre de usuario</h3>
-    <input name="name" class="modal-arg-1" value="<?= $data->user->name; ?>" placeholder="Nombre de usuario">
+    <input name="name" value="<?= $data->user->name; ?>" placeholder="Nombre de usuario">
     <h3>Email</h3>
     <input name="email" type="text" value="<?= $data->user->email; ?>" placeholder="Email">
     <h3>Cambiar Contraseña <input onchange="$(this).parent().next().prop('disabled', !$(this).is(':checked'))" type="checkbox"></h3>
@@ -27,6 +27,16 @@ require 'header.php';
         <input name="pfp" type="file" accept="image/jpeg, image/png" hidden>
     </h3>
     
+    <button type="submit" class="self-center">Aceptar</button>
+    <button type="button" class="self-center modal-close no-gradient black">Cancelar</button>
+</form>
+
+<form class="modal hidden a-start" id="modal-edit-drive" action="/drive/update/" method="POST">
+    <h3>Nombre del drive</h3>
+    <input name="drivename" class="modal-arg-1" type="hidden" placeholder="Nombre del drive">
+    <input name="name" class="modal-arg-1"  placeholder="Nombre del drive">
+    <h3>Cambiar Contraseña <input onchange="$(this).parent().next().prop('disabled', !$(this).is(':checked'))" type="checkbox"></h3>
+    <input name="password" type="password" placeholder="Contraseña" disabled>
     <button type="submit" class="self-center">Aceptar</button>
     <button type="button" class="self-center modal-close no-gradient black">Cancelar</button>
 </form>
@@ -65,6 +75,7 @@ $result = $data->user->get_own_drives();
             <?php if ($data->perms): ?>
                 <span modal-open="modal-del-drive" modal-args="<?= $drive['name']; ?>" class="material-icons-round pointer">delete</span>
             <?php endif; ?>
+                <span modal-open="modal-edit-drive" modal-args="<?= $drive['name'] ?>" class="material-icons-round pointer">edit</span>
             </td>
         </tr>
     <?php endwhile; ?>
