@@ -39,6 +39,11 @@ class UserController {
         redirect('user/profile/' . $username);
     }
 
+    function logout() {
+        session_set('user_id', NULL);
+        redirect('');
+    }
+
     function signup() {
         if (!is_post()) {
             render('signup');

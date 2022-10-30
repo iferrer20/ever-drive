@@ -14,7 +14,7 @@ class DriveController {
     }
 
     function check_owner() { // Midleware
-        if ($this->user->id != $this->drive->author?->id) {
+        if (!$this->user || $this->user->id != $this->drive->author?->id) {
             die();
         }
     }
@@ -37,21 +37,25 @@ class DriveController {
             ));
         }
 
+        if ($id = session('user_id')) {
+            $this->user = new UserModel();
+            $this->user->get_byid($id);
+        }
+
         if (!$this->drive->get($drivename)) {  // create drive if not exists 
             $this->drive->create($drivename, $password); 
             $this->grant_access();
         }
 
-        if (empty($this->drive->password) || (post('password') && $this->drive->check_password($password))) {
+        if (
+            empty($this->drive->password) || 
+            $this->drive->author && $this->drive->author->id == $this->user?->id || 
+            $this->drive->check_password($password)
+        ) {
             $this->grant_access();
         } else if (strcmp(session('drive'), $this->drive->name)) {
             http_response_code(403);
             render('askpw', $this);
-        }
-
-        if ($id = session('user_id')) {
-            $this->user = new UserModel();
-            $this->user->get_byid($id);
         }
     }
 

@@ -31,6 +31,9 @@ button {
   &.black {
     color: black;
   }
+  &.red {
+    background: linear-gradient(279.5deg, $red1 12.23%, $red2 104.2%) !important;
+  }
 }
 
 input {

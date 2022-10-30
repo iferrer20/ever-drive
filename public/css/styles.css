@@ -107,16 +107,14 @@
   width: 60px;
   text-align: center;
 }
+.drive-main .explorer table .entry .icon .thumbnail {
+  width: 50px;
+  height: 50px;
+  background-size: cover;
+  background-position: center;
+}
 .drive-main .explorer table .entry .icon span {
   font-size: 50px;
-}
-.drive-main .explorer table .entry .thumbnail {
-  display: flex;
-}
-.drive-main .explorer table .entry .thumbnail img {
-  margin: auto;
-  height: 50px;
-  text-align: center;
 }
 
 .avatar {
@@ -402,6 +400,9 @@ body > img {
   font-size: 100px;
 }
 .profile table {
+  max-height: 500px;
+  overflow: auto;
+  display: block;
   border-collapse: collapse;
   user-select: none;
 }
@@ -470,6 +471,9 @@ button.no-gradient {
 }
 button.black {
   color: black;
+}
+button.red {
+  background: linear-gradient(279.5deg, rgb(255, 0, 0) 12.23%, rgb(245, 70, 0) 104.2%) !important;
 }
 
 input {

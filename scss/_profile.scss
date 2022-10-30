@@ -18,6 +18,9 @@
   }
 
   table {
+    max-height: 500px;
+    overflow: auto;
+    display: block;
     border-collapse: collapse; 
     user-select: none;
 

@@ -111,7 +111,7 @@ require 'header.php';
 ?>
         <tr class="entry file">
             <?php if (preg_match('/\.png$|\.jpg$|\.jpeg/', $file->name)): ?>
-                <td class="thumbnail"><img src="<?= '/' . uri() . '/' . $file->name; ?>"></td>
+                <td class="icon"><div class="thumbnail" style="background-image: url('<?= '/' . uri() . '/' . $file->name; ?>')"></td>
             <?php else: ?>
                 <td class="icon"><span class="material-icons-round">description</span></td>
             <?php endif; ?>

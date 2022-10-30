@@ -12,6 +12,13 @@ require 'header.php';
     </div>
 </form>
 
+<form class="modal hidden a-start" id="modal-logout" action="/user/logout/">
+    <h3>¿Cerrar sessión?</h3>
+    <button type="submit" class="self-center">Aceptar</button>
+    <button type="button" class="self-center modal-close no-gradient black">Cancelar</button>
+</form>
+
+
 <form class="modal hidden a-start" id="modal-edit-user" action="/user/update/" method="POST" enctype="multipart/form-data">
     <h3>Nombre de usuario</h3>
     <input name="name" value="<?= $data->user->name; ?>" placeholder="Nombre de usuario">
@@ -26,7 +33,7 @@ require 'header.php';
         </span>
         <input name="pfp" type="file" accept="image/jpeg, image/png" hidden>
     </h3>
-    
+    <!-- <button onclick="document.cookie='';window.location='/'" type="button" class="red">Cerrar sessión</button> -->
     <button type="submit" class="self-center">Aceptar</button>
     <button type="button" class="self-center modal-close no-gradient black">Cancelar</button>
 </form>
@@ -54,7 +61,8 @@ $result = $data->user->get_own_drives();
 
 <h2 class="d-flex a-center"><?= $data->user->name; ?> 
 <?php if ($data->perms): ?>
-<span modal-open="modal-edit-user" class="material-icons-round pointer">settings</span>
+    <span modal-open="modal-edit-user" class="material-icons-round pointer">settings</span>
+    <span modal-open="modal-logout" class="material-icons-round pointer">logout</span>
 <?php endif; ?>
 </h2>
 
@@ -74,8 +82,8 @@ $result = $data->user->get_own_drives();
                 <a href="/<?= $drive['name']; ?>"><span class="material-icons-round">arrow_forward</span></a>
             <?php if ($data->perms): ?>
                 <span modal-open="modal-del-drive" modal-args="<?= $drive['name']; ?>" class="material-icons-round pointer">delete</span>
-            <?php endif; ?>
                 <span modal-open="modal-edit-drive" modal-args="<?= $drive['name'] ?>" class="material-icons-round pointer">edit</span>
+            <?php endif; ?>
             </td>
         </tr>
     <?php endwhile; ?>

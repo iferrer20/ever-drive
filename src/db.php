@@ -25,7 +25,7 @@ CREATE TABLE drives (
     password VARCHAR(128),
     FOREIGN KEY(user) REFERENCES user(id)
 );
-CREATE UNIQUE INDEX unique_drive_name ON drive (name);
+CREATE UNIQUE INDEX unique_drive_name ON drives (name);
 ');
     
 }
