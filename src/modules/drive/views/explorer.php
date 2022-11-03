@@ -21,7 +21,7 @@ require 'header.php';
     </form>
 </div>
 <div id="upload-file-card" class="transition-visibility hidden">
-    Subir a <?= $data->drivename ?>
+    Subir a <?= $data->drive->name ?>
     <span class="material-icons-round">
     file_upload
     </span>
