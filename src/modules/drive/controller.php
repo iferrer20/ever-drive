@@ -7,7 +7,6 @@ class DriveController {
     public $password;
     public $drive;
     public $user;
-    static public $default_action = "read";
 
     private function grant_access() {
         session_set('drive', $this->drive->name);

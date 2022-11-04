@@ -17,10 +17,9 @@ if (!is_dir(PROFILES_DIR)) {
     mkdir(PROFILES_DIR);
 }
 
-$uri = secure_format(rtrim(substr(urldecode($_SERVER['REQUEST_URI']), 1), '/'));
+$uri = htmlspecialchars(rtrim(substr(urldecode($_SERVER['REQUEST_URI']), 1), '/'), ENT_QUOTES, 'UTF-8');
 $uri_arr = explode('/', $uri);
 $module = $uri_arr[0];
-$action = $_POST['action'] ?? $uri_arr[1] ?? '';
 
 $path_controller = 'modules/' . $module;
 if (!is_dir('modules/' . $module) || $module == 'drive') {
@@ -28,16 +27,15 @@ if (!is_dir('modules/' . $module) || $module == 'drive') {
     array_unshift($uri_arr, $module);
     $path_controller =  'modules/' . $module;
 }
+
 $file_controller = $path_controller . '/controller.php';
+$action = $_POST['action'] ?? ($module == 'drive' ? 'read' : $uri_arr[1] ?? '');
 
 require $file_controller;
 $controller_class = $module . 'Controller';
 $controller = new $controller_class;
 if (method_exists($controller, $action)) {
     $controller->{$action}();
-} else if (property_exists($controller, 'default_action')) {
-    $controller->{$controller::$default_action}();
 } 
-
 header('Location: ' . referrer());
 ?>
