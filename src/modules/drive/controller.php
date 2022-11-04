@@ -12,7 +12,7 @@ class DriveController {
         session_set('drive', $this->drive->name);
     }
 
-    function check_owner() { // Midleware
+    private function check_owner() { // Midleware
         if (!$this->user || $this->user->id != $this->drive->author?->id) {
             die();
         }

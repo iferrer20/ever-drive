@@ -99,16 +99,14 @@ require 'header.php';
         </tr>
     <?php endif; ?>
 
-    <?php foreach (get_folders($data->path) as $folder) {
-    ?>
+    <?php foreach (get_folders($data->path) as $folder): ?>
         <tr class="entry folder">
             <td class="icon"><span class="material-icons-round">folder</span></td>
             <td class="name"><?= $folder->name ?></td>
             <td class="size"></td>
         </tr>
-    <?php } ?>
-<?php foreach (get_files($data->path) as $file) {
-?>
+    <?php endforeach; ?>
+    <?php foreach (get_files($data->path) as $file): ?>
         <tr class="entry file">
             <?php if (preg_match('/\.png$|\.jpg$|\.jpeg/', $file->name)): ?>
                 <td class="icon"><div class="thumbnail" style="background-image: url('<?= '/' . uri() . '/' . $file->name; ?>')"></td>
@@ -118,7 +116,7 @@ require 'header.php';
             <td class="name"><?= $file->name ?></td>
             <td class="size"><?= format_bytes($file->size); ?></td>
         </tr>
-<?php } ?>
+    <?php endforeach; ?>
     </table>
     </div>
 
