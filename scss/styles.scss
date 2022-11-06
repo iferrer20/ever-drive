@@ -166,3 +166,15 @@ a {
   border-radius: 50%;
   display: block;
 }
+
+.main-header {
+  .avatar {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 10px;
+    span {
+      font-size: 50px;
+    }
+  }
+}

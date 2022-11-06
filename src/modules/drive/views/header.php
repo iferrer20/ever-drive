@@ -25,7 +25,7 @@
 <div class="header">           
     <img src="/img/logo_horizontal.png" alt="logo">
     <input type="text" placeholder="Buscar en drive">
-    <a class="avatar" href="<?= $data->user ? '/user/profile/' . $data->user->name : '/user/signin' ?>">
+    <a class="avatar" href="/user/myprofile/">
     <?php if ($data->user?->has_pfp()): ?>
         <span class="pfp" style="background-image: url('/user/pfp/<?= $data->user->id; ?>')">
         </span>

@@ -90,7 +90,7 @@ function getfile($str) {
 }
 
 function referrer() {
-    return $_SERVER['HTTP_REFERER'];
+    return $_SERVER['HTTP_REFERER'] ?? '';
 }
 
 ?>

@@ -3,7 +3,8 @@ $title = 'Usuario ' . $data->user->name;
 require 'header.php';
 ?>
 
-<form class="modal hidden" id="modal-del-drive" action="/drive/deldrive/" method="POST">
+<form class="modal hidden" id="modal-del-drive" action="/drive/" method="POST">
+    <input type="hidden" name="action" value="deldrive">
     <h2 class="center">¿Eliminar drive <span class="modal-arg-1"></span>?</h2>
     <input type="hidden" name="drivename" class="modal-arg-1">
     <div class="buttons">
@@ -50,9 +51,7 @@ require 'header.php';
 
 <div class="profile">
 
-<?php
-$result = $data->user->get_own_drives();
-?>
+
 <?php if ($data->user->has_pfp()): ?>
     <div class="pfp" style="background-image: url('/user/pfp/<?= $data->user->id; ?>')"></div>
 <?php else: ?>
@@ -73,7 +72,9 @@ $result = $data->user->get_own_drives();
             <th>Nombre</th>
             <th>Creado el</th>
         </tr>
-    <?php while ($drive = $result->fetchArray()): ?>
+    <?php
+        $result = $data->user->get_own_drives();
+        while ($drive = $result->fetchArray()): ?>
         <tr>
             <td><span class="driveicon material-icons-round">cloud</span></td>
             <td class="drive"><?= $drive['name']; ?></td>

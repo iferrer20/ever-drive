@@ -13,7 +13,7 @@ class UserController {
         $_SESSION['user_id'] = $this->user->id;
     }
 
-    function check_auth($redirect = true) {
+    private function check_auth($redirect = true) {
         if ($id = session('user_id')) {
             $this->user->get_byid($id);
             return true;
@@ -83,7 +83,7 @@ class UserController {
         $user = new UserModel();
         if (!$user->get(uri(2))) {
             http_response_code(404);
-            render('profilenotfound');
+            render('profile404');
         }
 
         $this->check_auth(false);
@@ -101,6 +101,11 @@ class UserController {
         $mime_type = mime_content_type($path);
         header('Content-type: ' . $mime_type);
         readfile($path);
+    }
+
+    function myprofile() {
+        $this->check_auth();
+        redirect('user/profile/' . $this->user->name);
     }
 };
 

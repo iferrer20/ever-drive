@@ -22,7 +22,7 @@ $uri_arr = explode('/', $uri);
 $module = $uri_arr[0];
 
 $path_controller = 'modules/' . $module;
-if (!is_dir('modules/' . $module) || $module == 'drive') {
+if (!is_dir('modules/' . $module)) {
     $module = DEFAULT_MODULE;
     array_unshift($uri_arr, $module);
     $path_controller =  'modules/' . $module;
@@ -36,6 +36,9 @@ $controller_class = $module . 'Controller';
 $controller = new $controller_class;
 if (method_exists($controller, $action)) {
     $controller->{$action}();
-} 
+} else {
+    require './page404.php';
+    die();
+}
 header('Location: ' . referrer());
 ?>

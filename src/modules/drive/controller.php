@@ -20,7 +20,7 @@ class DriveController {
 
     function __construct() {
         global $uri, $uri_arr, $action;
-        $drivename = $_POST['drivename'] ?? $uri_arr[1];
+        $drivename = $_POST['drivename'] ?? $uri_arr[1] ?? '';
         $this->path = DRIVES_DIR . $uri;
         if (is_dir($this->path)) {
             $this->path .= '/';
@@ -28,17 +28,13 @@ class DriveController {
         $password = $_POST['password'] ?? 0;
         $this->drive = new DriveModel();
 
-        if (!preg_match('/^[A-Za-z0-9_]{0,32}$/', $drivename)) {
-            render('invalid', (object) array(
-                'drive' => (object) array(
-                    'name' => $drivename
-                )
-            ));
-        }
-
         if ($id = session('user_id')) {
             $this->user = new UserModel();
             $this->user->get_byid($id);
+        }
+
+        if (!preg_match('/^[A-Za-z0-9_]{1,32}$/', $drivename)) {
+            render('invalid', $this);
         }
 
         if (!$this->drive->get($drivename)) {  // create drive if not exists 
@@ -67,6 +63,7 @@ class DriveController {
         } 
 
         if (!is_dir($this->path)) {
+            http_response_code(404);
             render('file404', $this);
         }
         render('explorer', $this);
