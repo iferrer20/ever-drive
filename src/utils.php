@@ -7,10 +7,6 @@ class BadRequestException extends Exception {
     }
 }
 
-function secure_format($str) {
-    return str_replace('..', '', htmlspecialchars($str));
-}
-
 function convert_path($path) {
 	$path = explode('/', $path);
 	for ($i=0; $i<count($path); $i++) {

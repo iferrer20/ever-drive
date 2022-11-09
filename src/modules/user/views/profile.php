@@ -39,9 +39,10 @@ require 'header.php';
     <button type="button" class="self-center modal-close no-gradient black">Cancelar</button>
 </form>
 
-<form class="modal hidden a-start" id="modal-edit-drive" action="/drive/update/" method="POST">
+<form class="modal hidden a-start" id="modal-edit-drive" action="/drive/" method="POST">
+    <input type="hidden" name="action" value="update">
     <h3>Nombre del drive</h3>
-    <input name="drivename" class="modal-arg-1" type="hidden" placeholder="Nombre del drive">
+    <input name="drivename" class="modal-arg-1" type="hidden">
     <input name="name" class="modal-arg-1"  placeholder="Nombre del drive">
     <h3>Cambiar Contraseña <input onchange="$(this).parent().next().prop('disabled', !$(this).is(':checked'))" type="checkbox"></h3>
     <input name="password" type="password" placeholder="Contraseña" disabled>
