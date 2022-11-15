@@ -80,7 +80,7 @@ class UserModel {
         $stmt = $db->prepare('INSERT INTO users (name, email, password) VALUES (:name, :email, :password);');
         $stmt->bindValue(':name', $name, SQLITE3_TEXT);
         $stmt->bindValue(':email', $email, SQLITE3_TEXT);
-        $stmt->bindValue(':password', $password, SQLITE3_TEXT);
+        $stmt->bindValue(':password', $this->password, SQLITE3_TEXT);
         try {
             $result = $stmt->execute();
         } catch(Exception) {
@@ -90,7 +90,6 @@ class UserModel {
         
         $this->name = $name;
         $this->email = $email;
-        $this->password = $password;
         $this->id = $db->lastInsertRowID();
     }
 
