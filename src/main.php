@@ -40,5 +40,6 @@ if (method_exists($controller, $action)) {
     require './page404.php';
     die();
 }
-header('Location: ' . referrer());
+header('Location: ' . $_SERVER['REQUEST_URI']);
+
 ?>

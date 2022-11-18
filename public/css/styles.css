@@ -66,6 +66,9 @@
   width: 100%;
   user-select: none;
 }
+.drive-main .explorer .name {
+  width: 50%;
+}
 .drive-main .explorer table .entry.selected {
   background-color: rgb(205, 255, 255);
 }

@@ -33,7 +33,7 @@ class DriveController {
             $this->user->get_byid($id);
         }
 
-        if (!preg_match('/^[A-Za-z0-9_]{1,32}$/', $drivename)) {
+        if (!preg_match('/^[A-Za-z0-9_ ]{1,32}$/', $drivename)) {
             render('invalid', $this);
         }
 
@@ -59,7 +59,7 @@ class DriveController {
             $mime_type = mime_content_type($this->path);
             header('Content-type: ' . $mime_type);
             readfile($this->path);
-            return;
+	    die();
         } 
 
         if (!is_dir($this->path)) {
