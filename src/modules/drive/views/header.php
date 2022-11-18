@@ -16,9 +16,6 @@
 
     <!-- scripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="/js/index.js" async></script>
-    <script src="/js/drive.js" async></script>
-
     <title>Ever drive - <?= $data->drive->name ?></title>
 </head>
 <body>
